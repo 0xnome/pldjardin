@@ -1,0 +1,111 @@
+@startuml
+skinparam shadowing false
+skinparam monochrome false
+skinparam TitleFontSize 20
+skinparam sequenceTitleFontSize 20
+skinparam sequenceTitleFontStyle plain
+
+skinparam state {
+  BackgroundColor white
+  BackgroundColor<<Warning>> lightblue
+}
+
+class Plante{
+	id
+	nom
+	espece - [liste?]
+	image
+	description
+}
+
+class Jardin{
+	id
+	nom
+	ville
+	code postal
+	rue
+	latitude
+	longitude
+	horaire - [texte libre]
+	description
+	image
+	restreint - [bool -> restreint aux membres]
+}
+
+class Lopin{
+	id
+	nom
+	ville
+	code postal
+	rue
+	latitude
+	longitude
+	description
+}
+
+class Utilisateur{
+	id
+	nom
+	prenom
+	mail
+	motdepasse
+	ville
+	photo
+	description - [texte pour se presenter?]
+}
+
+class Actualite{
+	id
+	texte
+	datetime
+}
+
+class CommentaireJardin{
+	id
+	datetime
+	texte
+}
+
+class CommentairePlante{
+	id
+	datetime
+	texte
+}
+
+class CommentaireLopin{
+	id
+	datetime
+	texte
+}
+
+class Action{
+	id
+	date
+}
+
+class TypeAction{
+	id
+	nom
+}
+
+
+Jardin "0..n" -- "0..1" Lopin : jardin
+Lopin "0..n" -- "1..1" Plante : lopin
+
+TypeAction "0..n" -- "1..1" Action : type
+Action "1..1" -- "0..n" Utilisateur : utilisateur
+Action "0..1" -- "0..n" Plante : plante
+Action "0..1" -- "0..n" Lopin : lopin
+
+CommentairePlante "1..1" -- "0..n" Utilisateur : auteur
+CommentairePlante "1..1" -- "0..n" Plante : plante
+CommentaireJardin "1..1" -- "0..n" Utilisateur : auteur
+CommentaireJardin "1..1" -- "0..n" Jardin : jardin
+CommentaireLopin "1..1" -- "0..n" Utilisateur : auteur
+CommentaireLopin "1..1" -- "0..n" Lopin : lopin
+
+Utilisateur "0..n" -- "1..n" Jardin : administrateurs
+Utilisateur "0..n" -- "1..n" Jardin : membres
+
+Actualite "1..1" -- "0..n" Jardin : jardin
+@enduml
