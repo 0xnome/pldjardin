@@ -21,25 +21,18 @@ class Plante{
 class Jardin{
 	id
 	nom
-	ville
-	code postal
-	rue
-	latitude
-	longitude
+	site
+	email de contact
 	horaire - [texte libre]
 	description
 	image
 	restreint - [bool -> restreint aux membres]
+	compostier - [bool]
 }
 
 class Lopin{
 	id
 	nom
-	ville
-	code postal
-	rue
-	latitude
-	longitude
 	description
 }
 
@@ -52,6 +45,15 @@ class Utilisateur{
 	ville
 	photo
 	description - [texte pour se presenter?]
+}
+
+class Adresse{
+	ville
+	code postal
+	rue
+	latitude
+	longitude
+	description
 }
 
 class Actualite{
@@ -108,4 +110,7 @@ Utilisateur "0..n" -- "1..n" Jardin : administrateurs
 Utilisateur "0..n" -- "1..n" Jardin : membres
 
 Actualite "1..1" -- "0..n" Jardin : jardin
+
+Adresse "1..n" -- "1..1" Jardin : adresse
+Adresse "1..n" -- "1..1" Lopin : adresse
 @enduml
