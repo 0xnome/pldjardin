@@ -15,10 +15,10 @@ class UtilisateurInline(admin.StackedInline):
 
 
 # Define a new User admin
-class UserAdmin(UserAdmin):
+class UtilisateurAdmin(UserAdmin):
     inlines = (UtilisateurInline,)
 
 
 # Re-register UserAdmin
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, UtilisateurAdmin)
