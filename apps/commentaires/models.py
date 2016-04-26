@@ -4,11 +4,13 @@ from django.db import models
 # Create your models here.
 class Commentaire(models.Model):
     texte = models.TextField(blank=False, null=False)
-    datetime = models.DateTimeField(auto_now_add=True)
+    date_creation = models.DateTimeField(auto_now_add=True, verbose_name="Date de création",
+                                         help_text="Date de création du commentaire")
     utilisateur = models.ForeignKey('gensdujardin.Utilisateur', on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
+        ordering = ['date_creation']
 
 
 class CommentairePlante(Commentaire):
