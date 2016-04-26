@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -13,27 +14,37 @@ def content_file_name_jardin(instance, filename):
     Returns:
 
     """
-    return '/'.join(['images-jardins', instance.nom + instance.ville, filename])
+    return '/'.join(['images-jardins', instance.nom + instance.adresse.ville, filename])
 
 
 def content_file_name_plante(instance, filename):
-    return '/'.join(['images-jardins/plantes', instance.nom + instance.ville, filename])
+    return '/'.join(['images-jardins/plantes', instance.nom + instance.jardin.ville, filename])
+
+
+class Adresse(models.Model):
+    ville = models.CharField(max_length=10)
+    code_postal_regex = RegexValidator(regex=r'^\d{5}$',
+                                       message="Le numéro de téléphone doit être composé de 10 chiffres.")
+    code_postal = models.CharField(max_length=5, validators=[code_postal_regex], verbose_name="Code postal")
+    rue = models.CharField(max_length=200)
+    long = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
+
+
+def create_default_adresse():
+    return Adresse(ville="Villeurbane", rue="20 avenue Albert Einstein", code_postal='69100')
 
 
 class Jardin(models.Model):
+    adresse = models.ForeignKey(Adresse)
     nom = models.CharField(max_length=20, help_text="Nom de la ville où se trouve le jardin")
-    ville = models.CharField(max_length=10)
-    code_postal = models.IntegerField(verbose_name="Code postal")
-    rue = models.CharField(max_length=20)
     horaire = models.TextField(blank=False)
     image = models.ImageField(upload_to=content_file_name_jardin, null=False)
     description = models.TextField(blank=True, null=True)
     restreint = models.BooleanField()
-    long = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
-    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
 
     def __str__(self):
-        return "{} - {} - {}".format(self.nom, self.ville, self.description)
+        return "{} - {} - {}".format(self.nom, self.adresse.ville, self.description)
 
 
 class Actualite(models.Model):
@@ -47,6 +58,8 @@ class Actualite(models.Model):
 
 
 class Lopin(models.Model):
+    adresse = models.ForeignKey(Adresse,
+                                help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True)
     nom = models.CharField(max_length=20, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
