@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps.gensdujardin',
-    'apps.jardin'
+    'apps.jardin',
+    'apps.commentaires'
 ]
 
 MIDDLEWARE_CLASSES = [
