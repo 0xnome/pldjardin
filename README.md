@@ -10,7 +10,7 @@ Les packages à installer avec `pip` et leur version sont renseignés dans le fi
 
 Le projet est actuellement configuré pour du `SqlLite`.
 
-La base sera différente en poduction.
+La base sera différente en production.
 
 ## Les applications
 La gestio des membres se fait par l'application `apps.gensdujardin`

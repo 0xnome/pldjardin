@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('code_postal', models.IntegerField(verbose_name='Code postal')),
                 ('rue', models.CharField(max_length=20)),
                 ('horaire', models.TextField()),
-                ('image', models.ImageField(upload_to=apps.jardin.models.content_file_name)),
+                ('image', models.ImageField(upload_to=apps.jardin.models.content_file_name_jardin)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('restreint', models.BooleanField()),
             ],

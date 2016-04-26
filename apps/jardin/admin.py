@@ -1,6 +1,9 @@
 from django.contrib import admin
-from apps.jardin.models import *
+
+from .models import Jardin, Adresse
+
 # Register your models here.
 
 
 admin.site.register(Jardin)
+admin.site.register(Adresse)
