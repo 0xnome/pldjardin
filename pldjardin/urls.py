@@ -19,14 +19,24 @@ from django.conf.urls.static import static
 from django.conf.urls import url, include
 from rest_framework import routers
 
+from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
 from apps.gensdujardin.views import UtilisateurViewSet
-from apps.jardin.views import JardinViewSet
-# from apps.actions.views import
-# from apps.commentaires.views import
+from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
+from apps.actions.views import ActionViewSet, TypeActionViewSet
+
 
 router = routers.DefaultRouter()
 router.register(r'utilisateurs', UtilisateurViewSet )
 router.register(r'jardins', JardinViewSet )
+router.register(r'adresses', AdresseViewSet )
+router.register(r'lopins', LopinViewSet)
+router.register(r'actualites', ActualiteViewSet)
+router.register(r'plantes', PlanteViewSet)
+router.register(r'actions', ActionViewSet)
+router.register(r'typesaction', TypeActionViewSet)
+router.register(r'commentairesjardin', CommentaireJardinViewSet)
+router.register(r'commentaireslopin', CommentaireLopinViewSet)
+router.register(r'commentairesplante', CommentairePlanteViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
