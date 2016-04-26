@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.gensdujardin',
     'apps.jardin',
-    'apps.commentaires'
+    'apps.commentaires',
+    'apps.actions'
 ]
 
 MIDDLEWARE_CLASSES = [

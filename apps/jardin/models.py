@@ -18,7 +18,7 @@ def content_file_name_jardin(instance, filename):
 
 
 def content_file_name_plante(instance, filename):
-    return '/'.join(['images-jardins/plantes', instance.nom + instance.jardin.ville, filename])
+    return '/'.join(['images-jardins/plantes', instance.nom + instance.lopin.adresse.ville, filename])
 
 
 class Adresse(models.Model):
