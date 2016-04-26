@@ -66,3 +66,7 @@ ENV/
 
 # SqlLite
 db.sqlite3
+
+
+# project
+/pldjardin/databases.py
