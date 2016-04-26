@@ -22,7 +22,7 @@ def content_file_name_plante(instance, filename):
 
 
 class Adresse(models.Model):
-    ville = models.CharField(max_length=10)
+    ville = models.CharField(max_length=100)
     code_postal_regex = RegexValidator(regex=r'^\d{5}$',
                                        message="Le numéro de téléphone doit être composé de 10 chiffres.")
     code_postal = models.CharField(max_length=5, validators=[code_postal_regex], verbose_name="Code postal")
@@ -37,7 +37,7 @@ def create_default_adresse():
 
 class Jardin(models.Model):
     adresse = models.ForeignKey(Adresse)
-    nom = models.CharField(max_length=20, help_text="Nom de la ville où se trouve le jardin")
+    nom = models.CharField(max_length=30, help_text="Nom de la ville où se trouve le jardin")
     horaire = models.TextField(blank=False)
     image = models.ImageField(upload_to=content_file_name_jardin, null=False)
     description = models.TextField(blank=True, null=True)
@@ -61,13 +61,13 @@ class Lopin(models.Model):
     adresse = models.ForeignKey(Adresse,
                                 help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True)
-    nom = models.CharField(max_length=20, help_text="Nom du lopin")
+    nom = models.CharField(max_length=30, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
 
 class Plante(models.Model):
     lopin = models.ForeignKey(Lopin, on_delete=models.CASCADE)
-    nom = models.CharField(max_length=20, help_text="Nom de la plante", verbose_name="Nom de la plante")
+    nom = models.CharField(max_length=30, help_text="Nom de la plante", verbose_name="Nom de la plante")
     image = models.ImageField(upload_to=content_file_name_plante, null=False)
-    espece = models.CharField(max_length=20)
+    espece = models.CharField(max_length=30)
     description = models.TextField(blank=True, null=True)

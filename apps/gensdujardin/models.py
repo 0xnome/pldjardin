@@ -8,7 +8,7 @@ def content_file_name(instance, filename):
     return '/'.join(['avatars', instance.user.username, filename])
 
 
-class Utilisateur(models.Model):
+class  Utilisateur(models.Model):
     user = models.OneToOneField(User)
     ville = models.CharField(max_length=100, blank=True, null=True)
     avatar = models.ImageField(upload_to=content_file_name, blank=True, null=True)

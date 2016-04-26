@@ -19,11 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.conf.urls import url, include
+from rest_framework import routers
 
+router = routers.DefaultRouter()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^utilisateurs/', include('apps.gensdujardin.urls', namespace='gensdujardin')),
+    url(r'^jardins/', include('apps.jardin.urls', namespace='jardin')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
