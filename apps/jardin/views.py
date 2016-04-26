@@ -1,14 +1,10 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from apps.jardin.models import Jardin
-
 from apps.jardin.serializers import JardinSerializer
 
-
-class JardinList(generics.ListAPIView):
-    queryset = Jardin.objects.all()
-    serializer_class = JardinSerializer
-
-
-class JardinDetail(generics.RetrieveAPIView):
+class JardinViewSet(viewsets.ModelViewSet):
+    """
+        list, create, retreive, update and delete
+    """
     queryset = Jardin.objects.all()
     serializer_class = JardinSerializer

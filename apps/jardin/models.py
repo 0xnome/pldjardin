@@ -1,9 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
-
-# Create your models here.
-
 def content_file_name_jardin(instance, filename):
     """
     Chemin pour l'image du jadin
