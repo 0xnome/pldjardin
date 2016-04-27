@@ -12,8 +12,8 @@ class TypeAction(models.Model):
 class Action(models.Model):
     type_action = models.ForeignKey(TypeAction)
     utilisateur = models.ForeignKey('gensdujardin.Profil', on_delete=models.CASCADE)
-    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE)
-    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE)
+    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE, null=True)
+    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE,  null=True)
     date_creation = models.DateTimeField(auto_now_add=True, help_text="Date de création de l'action",
                                          verbose_name="Date de création")
 
@@ -24,3 +24,5 @@ class Action(models.Model):
         else:
             return "{} le {} par {} sur {}".format(self.type_action.nom, self.date_creation,
                                                    self.utilisateur.user.username, self.lopin)
+
+    # TODO Vérifier la relation existante en fonction du typeAction

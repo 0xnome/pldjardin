@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from apps.gensdujardin.serializers import ProfilSerializer, UserSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 
 
@@ -14,28 +16,24 @@ class AdresseSerializer(serializers.ModelSerializer):
 
 
 class JardinSerializer(serializers.ModelSerializer):
-    adresse = AdresseSerializer(many=False)
-
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'horaire', 'image', 'description', 'restreint', 'adresse')
+        fields = ('id', 'nom', 'site', 'horaire', 'image', 'description', 'restreint', 'compostier', 'adresse', 'administrateurs', 'membres')
 
 
 class LopinSerializer(serializers.ModelSerializer):
-    adresse = AdresseSerializer(many=False)
-
     class Meta:
         model = Lopin
         fields = ('id', 'adresse', 'jardin', 'nom', 'description')
-
-
-class ActualiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Actualite
-        fields = ('id', 'jardin', 'texte', 'date_creation')
 
 
 class PlanteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plante
         fields = ('id', 'lopin', 'nom', 'image', 'espece', 'description')
+
+
+class ActualiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actualite
+        fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')

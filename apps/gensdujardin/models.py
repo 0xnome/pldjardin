@@ -14,6 +14,8 @@ class  Profil(models.Model):
     avatar = models.ImageField(upload_to=content_file_name, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.user)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

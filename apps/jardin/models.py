@@ -1,5 +1,9 @@
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+
+from apps.gensdujardin.models import Profil
+
 
 def content_file_name_jardin(instance, filename):
     """
@@ -27,6 +31,8 @@ class Adresse(models.Model):
     long = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
 
+    def __str__(self):
+        return "{} - {} - {}".format(self.rue, self.ville, self.code_postal)
 
 def create_default_adresse():
     return Adresse(ville="Villeurbane", rue="20 avenue Albert Einstein", code_postal='69100')
@@ -34,6 +40,10 @@ def create_default_adresse():
 
 class Jardin(models.Model):
     adresse = models.ForeignKey(Adresse)
+    administrateurs = models.ManyToManyField(User, related_name="admin_jardins")
+    membres = models.ManyToManyField(User, related_name="membre_jardins")
+
+
     nom = models.CharField(max_length=50, help_text="Nom du jardin")
     site = models.CharField(max_length=200, help_text="Le site web du jardin",blank=True, null=True)
     contact = models.EmailField(help_text="Email de contact du jardin, ou le mail d'un responsable")
@@ -47,10 +57,11 @@ class Jardin(models.Model):
     def __str__(self):
         return "{} - {} - {}".format(self.nom, self.adresse.ville, self.description)
 
-
 class Actualite(models.Model):
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE)
-    texte = models.TextField(blank=False)
+    # TODO restreindre aux admin d'un jardin
+    auteur = models.ForeignKey(User)
+    texte = models.TextField(blank=False, null=False)
     date_creation = models.DateTimeField(help_text="Date de création", verbose_name="Date de création",
                                          auto_now_add=True)
 
@@ -62,13 +73,15 @@ class Lopin(models.Model):
     adresse = models.ForeignKey(Adresse,
                                 help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True)
-    nom = models.CharField(max_length=30, help_text="Nom du lopin")
+    nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
 
 class Plante(models.Model):
     lopin = models.ForeignKey(Lopin, on_delete=models.CASCADE)
+
     nom = models.CharField(max_length=30, help_text="Nom de la plante", verbose_name="Nom de la plante")
-    image = models.ImageField(upload_to=content_file_name_plante, null=False)
-    espece = models.CharField(max_length=30)
+    # TODO default pour l'image, calcul en fonction de l'espce ?
+    image = models.ImageField(upload_to=content_file_name_plante, null=True)
+    espece = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
