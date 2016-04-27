@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from apps.gensdujardin.models import Utilisateur
+from apps.gensdujardin.serializers import UtilisateurSerializer
 
-# Create your views here.
+class UtilisateurViewSet(viewsets.ModelViewSet):
+    """
+        list, create, retreive, update and delete
+    """
+    queryset = Utilisateur.objects.all()
+    serializer_class = UtilisateurSerializer

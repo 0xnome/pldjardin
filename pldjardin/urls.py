@@ -13,32 +13,30 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.conf.urls import url, include
-from django.contrib.auth.models import User
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers
+
+from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
+from apps.gensdujardin.views import UtilisateurViewSet
+from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
+from apps.actions.views import ActionViewSet, TypeActionViewSet
 
 
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'is_staff')
-
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-# Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'utilisateurs', UtilisateurViewSet )
+router.register(r'jardins', JardinViewSet )
+router.register(r'adresses', AdresseViewSet )
+router.register(r'lopins', LopinViewSet)
+router.register(r'actualites', ActualiteViewSet)
+router.register(r'plantes', PlanteViewSet)
+router.register(r'actions', ActionViewSet)
+router.register(r'typesaction', TypeActionViewSet)
+router.register(r'commentairesjardin', CommentaireJardinViewSet)
+router.register(r'commentaireslopin', CommentaireLopinViewSet)
+router.register(r'commentairesplante', CommentairePlanteViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
