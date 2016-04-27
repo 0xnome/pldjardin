@@ -23,7 +23,7 @@ from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinVi
 from apps.gensdujardin.views import UserViewSet
 from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
 from apps.actions.views import ActionViewSet, TypeActionViewSet
-
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 router = routers.DefaultRouter()
 router.register(r'utilisateurs', UserViewSet )
@@ -42,6 +42,9 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token),
 ]
 
 if settings.DEBUG:
