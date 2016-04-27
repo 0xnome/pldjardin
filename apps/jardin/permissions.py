@@ -1,0 +1,90 @@
+from rest_framework import permissions
+
+from apps.jardin.models import Jardin
+
+
+class JardinPermission(permissions.BasePermission):
+    """
+    Global permissions for jardins
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            return request.user in obj.administrateurs.all()
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.method == "POST":
+            return True
+
+class LopinPermission(permissions.BasePermission):
+    """
+    Global permissions for lopins
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        # get, Head, Option
+        if request.method in permissions.SAFE_METHODS:
+            if obj.jardin:
+                if request.user in obj.jardin.membres.all():
+                    return True
+                elif obj.jardin.restreint:
+                    return False
+        #  Post, Patch, Put, Delete
+        else:
+            if obj.jardin:
+                if request.user in obj.jardin.administrateurs.all():
+                    return True
+                else:
+                    return False
+            elif "jardin" in request.data:
+                id = request.data["jardin"]
+                if id:
+                    if request.user in Jardin.objects.get(pk=int(id)).administrateurs.all():
+                        return True
+                else:
+                    return False
+        # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
+        return True
+
+    def has_permission(self, request, view):
+        if "jardin" in request.data:
+            id = request.data["jardin"]
+            if id:
+                if not (request.user in Jardin.objects.get(pk=int(id)).administrateurs.all()):
+                    return False
+        return True
+        # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
+
+
+
+
+class PlantePermission(permissions.BasePermission):
+    """
+    Global permissions for plantes
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            if obj.lopin.jardin:
+                if request.user in obj.lopin.jardin.membres.all():
+                    return True
+                elif obj.lopin.jardin.restreint:
+                    return False
+            else:
+                return True
+        else:
+            if obj.lopin.jardin:
+                if request.user in obj.lopin.jardin.administrateurs.all():
+                    return True
+                else:
+                    return False
+            else:
+                # TODO: un utilisateur peut il vraiment tout modifiez dans ue plante public ? delete etc...
+                return True
