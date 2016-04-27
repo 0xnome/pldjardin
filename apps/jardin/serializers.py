@@ -14,7 +14,7 @@ class AdresseSerializer(serializers.ModelSerializer):
 
 
 class JardinSerializer(serializers.ModelSerializer):
-    adresse = AdresseSerializer(many=False, read_only=True)
+    adresse = AdresseSerializer(many=False)
 
     class Meta:
         model = Jardin
@@ -22,7 +22,7 @@ class JardinSerializer(serializers.ModelSerializer):
 
 
 class LopinSerializer(serializers.ModelSerializer):
-    adresse = AdresseSerializer(many=False, read_only=True)
+    adresse = AdresseSerializer(many=False)
 
     class Meta:
         model = Lopin
