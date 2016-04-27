@@ -4,7 +4,6 @@ from django.db import models
 
 from apps.gensdujardin.models import Profil
 
-
 def content_file_name_jardin(instance, filename):
     """
     Chemin pour l'image du jadin
@@ -66,7 +65,7 @@ class Actualite(models.Model):
                                          auto_now_add=True)
 
     def __str__(self):
-        return "Actualité lié au jardin {}. Créee le {}".format(self.jardin.nom, self.date_creation)
+        return "Actualité liée au jardin {}. Créee le {}".format(self.jardin.nom, self.date_creation)
 
 
 class Lopin(models.Model):
