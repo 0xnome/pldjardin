@@ -14,7 +14,7 @@ class TypeActionSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
-    type_action = TypeActionSerializer(many=False, read_only=True)
+    type_action = TypeActionSerializer(many=False)
 
     class Meta:
         fields = ('id', 'type_action', 'utilisateur', 'lopin', 'plante', 'date_creation')
