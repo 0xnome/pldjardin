@@ -18,7 +18,7 @@ def content_file_name_jardin(instance, filename):
 
 
 def content_file_name_plante(instance, filename):
-    return '/'.join(['images-jardins/plantes', instance.nom + instance.lopin.adresse.ville, filename])
+    return '/'.join(['plantes', instance.nom + instance.lopin.adresse.ville, filename])
 
 
 class Adresse(models.Model):
@@ -54,7 +54,7 @@ class Jardin(models.Model):
     compostier = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} - {} - {}".format(self.nom, self.adresse.ville, self.description)
+        return "{} - {}".format(self.nom, self.adresse.ville)
 
 class Actualite(models.Model):
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE)
@@ -75,12 +75,18 @@ class Lopin(models.Model):
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return "{} - {}".format(self.nom, self.description)
+
 
 class Plante(models.Model):
     lopin = models.ForeignKey(Lopin, on_delete=models.CASCADE)
 
-    nom = models.CharField(max_length=30, help_text="Nom de la plante", verbose_name="Nom de la plante")
+    nom = models.CharField(max_length=30, help_text="Nom commun de la plante", verbose_name="Nom de la plante")
     # TODO default pour l'image, calcul en fonction de l'espce ?
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
-    espece = models.CharField(max_length=50)
+    espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
     description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return "{} - {}".format(self.nom, self.description)
