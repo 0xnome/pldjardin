@@ -8,7 +8,7 @@ def content_file_name(instance, filename):
     return '/'.join(['avatars', instance.user.username, filename])
 
 
-class  Utilisateur(models.Model):
+class  Profil(models.Model):
     user = models.OneToOneField(User)
     ville = models.CharField(max_length=100, blank=True, null=True)
     avatar = models.ImageField(upload_to=content_file_name, blank=True, null=True)
@@ -17,6 +17,6 @@ class  Utilisateur(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-       profile, created = Utilisateur.objects.get_or_create(user=instance)
+       profile, created = Profil.objects.get_or_create(user=instance)
 
 post_save.connect(create_user_profile, sender=User)

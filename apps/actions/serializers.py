@@ -6,14 +6,14 @@ from apps.actions.models import Action, TypeAction
 """
 
 
-class TypeActionSerializer(serializers.HyperlinkedModelSerializer):
+class TypeActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TypeAction
         fields = ('id', 'nom')
 
 
-class ActionSerializer(serializers.HyperlinkedModelSerializer):
+class ActionSerializer(serializers.ModelSerializer):
     type_action = TypeActionSerializer(many=False, read_only=True)
 
     class Meta:

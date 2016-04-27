@@ -34,11 +34,15 @@ def create_default_adresse():
 
 class Jardin(models.Model):
     adresse = models.ForeignKey(Adresse)
-    nom = models.CharField(max_length=30, help_text="Nom de la ville où se trouve le jardin")
-    horaire = models.TextField(blank=False)
-    image = models.ImageField(upload_to=content_file_name_jardin, null=False)
+    nom = models.CharField(max_length=50, help_text="Nom du jardin")
+    site = models.CharField(max_length=200, help_text="Le site web du jardin",blank=True, null=True)
+    contact = models.EmailField(help_text="Email de contact du jardin, ou le mail d'un responsable")
+    horaire = models.TextField()
+    # TODO mettre une image par defaut a la place du null false
+    image = models.ImageField(upload_to=content_file_name_jardin, null=True)
     description = models.TextField(blank=True, null=True)
-    restreint = models.BooleanField()
+    restreint = models.BooleanField(default=False)
+    compostier = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} - {} - {}".format(self.nom, self.adresse.ville, self.description)

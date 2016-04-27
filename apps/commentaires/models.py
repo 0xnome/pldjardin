@@ -5,7 +5,7 @@ class Commentaire(models.Model):
     texte = models.TextField(blank=False, null=False)
     date_creation = models.DateTimeField(auto_now_add=True, verbose_name="Date de création",
                                          help_text="Date de création du commentaire")
-    utilisateur = models.ForeignKey('gensdujardin.Utilisateur', on_delete=models.CASCADE)
+    utilisateur = models.ForeignKey('gensdujardin.Profil', on_delete=models.CASCADE)
 
     class Meta:
         abstract = True

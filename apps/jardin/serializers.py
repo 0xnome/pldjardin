@@ -7,13 +7,13 @@ from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 """
 
 
-class AdresseSerializer(serializers.HyperlinkedModelSerializer):
+class AdresseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
         fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat')
 
 
-class JardinSerializer(serializers.HyperlinkedModelSerializer):
+class JardinSerializer(serializers.ModelSerializer):
     adresse = AdresseSerializer(many=False, read_only=True)
 
     class Meta:
@@ -21,7 +21,7 @@ class JardinSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'nom', 'horaire', 'image', 'description', 'restreint', 'adresse')
 
 
-class LopinSerializer(serializers.HyperlinkedModelSerializer):
+class LopinSerializer(serializers.ModelSerializer):
     adresse = AdresseSerializer(many=False, read_only=True)
 
     class Meta:
@@ -29,13 +29,13 @@ class LopinSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'adresse', 'jardin', 'nom', 'description')
 
 
-class ActualiteSerializer(serializers.HyperlinkedModelSerializer):
+class ActualiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actualite
         fields = ('id', 'jardin', 'texte', 'date_creation')
 
 
-class PlanteSerializer(serializers.HyperlinkedModelSerializer):
+class PlanteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plante
         fields = ('id', 'lopin', 'nom', 'image', 'espece', 'description')

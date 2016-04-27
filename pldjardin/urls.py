@@ -20,13 +20,13 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
-from apps.gensdujardin.views import UtilisateurViewSet
+from apps.gensdujardin.views import UserViewSet
 from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
 from apps.actions.views import ActionViewSet, TypeActionViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'utilisateurs', UtilisateurViewSet )
+router.register(r'utilisateurs', UserViewSet )
 router.register(r'jardins', JardinViewSet )
 router.register(r'adresses', AdresseViewSet )
 router.register(r'lopins', LopinViewSet)
