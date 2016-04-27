@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from apps.jardin.models import Jardin
+from apps.jardin.models import Jardin, Lopin
 
 
 class JardinPermission(permissions.BasePermission):
@@ -70,7 +70,7 @@ class PlantePermission(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-
+        # GET HEAD OPTION
         if request.method in permissions.SAFE_METHODS:
             if obj.lopin.jardin:
                 if request.user in obj.lopin.jardin.membres.all():
@@ -79,12 +79,28 @@ class PlantePermission(permissions.BasePermission):
                     return False
             else:
                 return True
+        # PUT PATCH POST DELETE
         else:
             if obj.lopin.jardin:
-                if request.user in obj.lopin.jardin.administrateurs.all():
+                if request.user in obj.lopin.jardin.membres.all():
                     return True
                 else:
                     return False
             else:
                 # TODO: un utilisateur peut il vraiment tout modifiez dans ue plante public ? delete etc...
                 return True
+
+    def has_permission(self, request, view):
+        # GET OPTION HEAD
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # POST PATCH PUT DELETE
+        if "lopin" in request.data:
+            lopin = Lopin.objects.get(pk = int(request.data["lopin"]))
+            if lopin.jardin:
+                if not (request.user in lopin.jardin.membres.all()):
+                    return False
+            return True
+        else:
+            return True
+            # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
