@@ -1,5 +1,95 @@
 [
 {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$24000$zRyyvAdbB6eu$zLw5lPKnUJJ2jIkI0EYv7kW+dwS2lba2srwuPnfidkc=",
+        "last_login": "2016-04-27T14:55:01.221Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@admin.fr",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2016-04-27T10:57:13.415Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$24000$n5KdNaRxnYLv$EMOnlYWlC/S0A7XJf/oCO9Y+ON9qBf+re5fJVmLPSU8=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "SamanthaL",
+        "first_name": "Samantha",
+        "last_name": "Lenoir",
+        "email": "sam.lenoir@yahoo.fr",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-04-27T11:00:05Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$24000$Uj2eNXIIww6J$mvMs4pTGZvI0CP20cTzVYafykFlLjWq5+pYaCerx/s8=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "Nicoco",
+        "first_name": "Nicolas",
+        "last_name": "Cage",
+        "email": "nicoco@hollywood.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-04-27T11:11:54Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$24000$IsLMVyfIsnFV$COalYgqhWxjMLCwHlj8deidyV89NVBgufa3L3u5zDe8=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "Hubernation",
+        "first_name": "Hubert",
+        "last_name": "Dupont",
+        "email": "hubudu@cegetel.net",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-04-27T11:14:30Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$24000$knmsHqmv6rnE$v/hHd/KIQSJN+tjackPXooZR570nggII02qZJBf264w=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "JoBo",
+        "first_name": "Jos\u00e9",
+        "last_name": "Bov\u00e9",
+        "email": "jose.bove@lesverts.gouv",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-04-27T11:22:18Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "gensdujardin.profil",
     "pk": 1,
     "fields": {
@@ -202,7 +292,7 @@
     "fields": {
         "lopin": 1,
         "nom": "Tomate",
-        "image": "plantes/TomateLyon/tomate.png",
+        "image": "images-jardins/plantes/TomateLyon/tomate.png",
         "espece": "Solanum lycopersicum",
         "description": ""
     }
@@ -213,7 +303,7 @@
     "fields": {
         "lopin": 1,
         "nom": "Courgette",
-        "image": "plantes/CourgetteLyon/courgette.jpg",
+        "image": "images-jardins/plantes/CourgetteLyon/courgette.jpg",
         "espece": "Cucurbita pepo",
         "description": ""
     }
@@ -224,7 +314,7 @@
     "fields": {
         "lopin": 2,
         "nom": "Bleuet",
-        "image": "plantes/BleuetLyon/bleuet.JPG",
+        "image": "images-jardins/plantes/BleuetLyon/bleuet.JPG",
         "espece": "Centaurea cyanus",
         "description": "Faut pas les \u00e9craser ils sont tout petit"
     }
@@ -235,7 +325,7 @@
     "fields": {
         "lopin": 3,
         "nom": "Coquelicot",
-        "image": "plantes/CoquelicotLyon/Coquelicot.JPG",
+        "image": "images-jardins/plantes/CoquelicotLyon/Coquelicot.JPG",
         "espece": "Papaver rhoeas",
         "description": "Ne pas trop les arroser. une fois par semaine \u00e7a suffit !"
     }
@@ -246,7 +336,7 @@
     "fields": {
         "lopin": 3,
         "nom": "Coquelicot",
-        "image": "plantes/CoquelicotLyon/Coquelicot_fUQ2aAn.JPG",
+        "image": "images-jardins/plantes/CoquelicotLyon/Coquelicot_fUQ2aAn.JPG",
         "espece": "Papaver rhoeas",
         "description": "Pas trop les arroser. Une fois par semaine \u00e7a suffit."
     }
@@ -257,7 +347,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "plantes/TomateVilleurbanne/tomate.png",
+        "image": "images-jardins/plantes/TomateVilleurbanne/tomate.png",
         "espece": "Solanum lycopersicum",
         "description": "A r\u00e9colter en \u00e9t\u00e9, bien rouge."
     }
@@ -268,7 +358,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "plantes/TomateVilleurbanne/tomate_X6ycDkt.png",
+        "image": "images-jardins/plantes/TomateVilleurbanne/tomate_X6ycDkt.png",
         "espece": "Solanum lycopersicum",
         "description": "A r\u00e9colter en \u00e9t\u00e9, bien rouge."
     }
@@ -279,7 +369,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "plantes/TomateVilleurbanne/tomate_yNyc1zD.png",
+        "image": "images-jardins/plantes/TomateVilleurbanne/tomate_yNyc1zD.png",
         "espece": "Solanum lycopersicum",
         "description": "A cueuillir bien rouge en \u00e9t\u00e9 !"
     }
@@ -290,7 +380,7 @@
     "fields": {
         "lopin": 5,
         "nom": "Radis",
-        "image": "plantes/RadisVilleurbanne/radis.jpg",
+        "image": "images-jardins/plantes/RadisVilleurbanne/radis.jpg",
         "espece": "Raphanus sativus",
         "description": "Radis chinois c'est cool."
     }
@@ -301,7 +391,7 @@
     "fields": {
         "lopin": 5,
         "nom": "Radis",
-        "image": "plantes/RadisVilleurbanne/radis_nzsILWH.jpg",
+        "image": "images-jardins/plantes/RadisVilleurbanne/radis_nzsILWH.jpg",
         "espece": "Raphanus sativus",
         "description": "Toujours plus de radis chinois !"
     }
