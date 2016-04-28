@@ -77,9 +77,6 @@ class LopinPermission(permissions.BasePermission):
         else:
             return False
 
-
-
-
         if "jardin" in request.data:
             id = request.data["jardin"]
             if id:
@@ -122,16 +119,29 @@ class PlantePermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # POST PATCH PUT DELETE
-        if "lopin" in request.data:
-            lopin = Lopin.objects.get(pk = int(request.data["lopin"]))
-            if lopin.jardin:
-                if not (request.user in lopin.jardin.membres.all()):
-                    return False
-            return True
         else:
-            return True
-            # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
-
+            if permissions.IsAuthenticated.has_permission(self,request,view):
+                if request.method == "POST":
+                    if "lopin" in request.data:
+                        id = request.data["lopin"]
+                        if id != "":
+                            lopin = Lopin.objects.get(pk=int(id))
+                            if lopin.jardin:
+                                if not lopin.jardin.restreint:
+                                    return True
+                                elif request.user in lopin.jardin.membres.all():
+                                    return True
+                            # un utilisateur connecté peut ajouter des plantes dans un lopin sans jardin
+                            return True
+                    # necessaire pour tester l'api
+                    else:
+                        return True
+                # DELETE PUT PATCH
+                else:
+                    return True
+            # utilisateur non connecté
+            else:
+                return False
 
 
 class ActualitePermission(permissions.BasePermission):
