@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from apps.jardin.models import Jardin, Lopin
+from apps.jardin.models import Jardin, Lopin, Actualite
 
 
 class JardinPermission(permissions.BasePermission):
@@ -104,3 +104,41 @@ class PlantePermission(permissions.BasePermission):
         else:
             return True
             # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
+
+
+
+class ActualitePermission(permissions.BasePermission):
+    """
+    Global permissions for ActualiteJardin
+    """
+    def has_object_permission(self, request, view, obj):
+        # get head option
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        elif permissions.IsAuthenticated:
+            if request.method in ["PATCH","PUT", "DELETE"]:
+                # L'utilisateur admin peut modifier,supprimer une actualite
+                if request.user in obj.jardin.administrateurs.all():
+                    return True
+                return False
+        return False
+
+    def has_permission(self, request, view):
+        # get head option
+        if request.method in permissions.SAFE_METHODS:
+
+            return True
+        # utilisateur connecté
+        elif permissions.IsAuthenticated.has_permission(self,request,view):
+            if request.method == "POST":
+                if "jardin" in request.data:
+                    id = int(request.data["jardin"])
+                    # Un admin seulement peut crée une actualite sur son jardin
+                    if request.user in Jardin.objects.get(pk=id).membres.all():
+                        return True
+                # necessaire pour le test de l'api
+                elif not ("jardin" in request.data):
+                    return True
+            else:
+                return True
+        return False
