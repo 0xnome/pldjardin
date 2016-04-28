@@ -9,11 +9,11 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework import status
 
 from apps.actions.serializers import ActionSerializer
-from apps.gensdujardin.serializers import UserSerializer, InscriptionSerializer
+from apps.gensdujardin.serializers import UserFullSerializer, InscriptionSerializer
 
 from apps.jardin.serializers import JardinSerializer
 from rest_framework import viewsets
-from apps.gensdujardin.serializers import UserSerializer
+from apps.gensdujardin.serializers import UserFullSerializer
 from apps.gensdujardin.permission import UtilisateurPermission
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -23,15 +23,15 @@ class UserViewSet(viewsets.ModelViewSet):
 
     permission_classes = (UtilisateurPermission,)
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserFullSerializer
 
     @list_route(methods=["GET"])
     def moi(self, request, pk=None):
         user = request.user
         if user.is_authenticated():
-            serializer = UserSerializer(user)
+            serializer = UserFullSerializer(user)
             return Response(serializer.data)
-        return Response("Vous devez être connecté pour acceder à cette ressource",
+        return Response("{errors:[Vous devez être connecté pour acceder à cette ressource]}",
                         status=status.HTTP_403_FORBIDDEN)
 
     @detail_route(methods=["GET"])
