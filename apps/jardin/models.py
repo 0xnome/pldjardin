@@ -81,7 +81,7 @@ class Lopin(models.Model):
 
 
 class Plante(models.Model):
-    lopin = models.ForeignKey(Lopin, on_delete=models.CASCADE)
+    lopin = models.ForeignKey(Lopin, on_delete=models.CASCADE, related_name="plantes")
 
     nom = models.CharField(max_length=30, help_text="Nom commun de la plante", verbose_name="Nom de la plante")
     # TODO default pour l'image, calcul en fonction de l'espce ?

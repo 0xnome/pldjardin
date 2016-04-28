@@ -91,6 +91,13 @@ class LopinViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
+    def plantes(self, request, pk=None):
+        lopin = self.get_object()
+        plantes = lopin.plantes
+        serializer = PlanteSerializer(plantes, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
     def adresse(self, request, pk=None):
         lopin = self.get_object()
         adresse = lopin.adresse
@@ -128,4 +135,18 @@ class PlanteViewSet(viewsets.ModelViewSet):
         plante = self.get_object()
         commentaires = plante.commentaires.all()
         serializer = CommentairePlanteSerializer(commentaires, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def actions(self, request, pk=None):
+        plante = self.get_object()
+        actions = plante.actions.all()
+        serializer = ActionSerializer(actions, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def lopin(self, request, pk=None):
+        plante = self.get_object()
+        lopin = plante.lopin
+        serializer = LopinSerializer(lopin)
         return Response(serializer.data)
