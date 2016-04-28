@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from apps.gensdujardin.models import Profil
+from apps.jardin.serializers import JardinSerializer
 
 
 class ProfilSerializer(serializers.ModelSerializer):
@@ -15,5 +16,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'profil')
-
-

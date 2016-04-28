@@ -6,3 +6,4 @@ django-crispy-forms==1.6.0
 django-guardian==1.4.4
 djangorestframework-jwt==1.8.0
 django-cors-headers==1.1.0
+qrcode==5.2.2

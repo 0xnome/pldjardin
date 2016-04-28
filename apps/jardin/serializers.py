@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from apps.gensdujardin.serializers import ProfilSerializer, UserSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 
 

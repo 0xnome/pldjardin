@@ -14,12 +14,12 @@ class Commentaire(models.Model):
 
 
 class CommentairePlante(Commentaire):
-    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE)
+    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE, related_name="commentaires")
 
 
 class CommentaireJardin(Commentaire):
-    jardin = models.ForeignKey('jardin.Jardin', on_delete=models.CASCADE)
+    jardin = models.ForeignKey('jardin.Jardin', on_delete=models.CASCADE, related_name="commentaires")
 
 
 class CommentaireLopin(Commentaire):
-    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE)
+    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE, related_name="commentaires")
