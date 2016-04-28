@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -11,9 +12,9 @@ class TypeAction(models.Model):
 
 class Action(models.Model):
     type_action = models.ForeignKey(TypeAction)
-    utilisateur = models.ForeignKey('gensdujardin.Utilisateur', on_delete=models.CASCADE)
-    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE)
-    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE)
+    utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, related_name="actions")
+    lopin = models.ForeignKey('jardin.Lopin', on_delete=models.CASCADE, null=True, related_name="actions")
+    plante = models.ForeignKey('jardin.Plante', on_delete=models.CASCADE,  null=True, related_name="actions")
     date_creation = models.DateTimeField(auto_now_add=True, help_text="Date de création de l'action",
                                          verbose_name="Date de création")
 
@@ -24,3 +25,5 @@ class Action(models.Model):
         else:
             return "{} le {} par {} sur {}".format(self.type_action.nom, self.date_creation,
                                                    self.utilisateur.user.username, self.lopin)
+
+    # TODO Vérifier la relation existante en fonction du typeAction

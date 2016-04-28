@@ -105,10 +105,12 @@ CommentaireJardin "1..1" -- "0..n" Jardin : jardin
 CommentaireLopin "1..1" -- "0..n" Utilisateur : auteur
 CommentaireLopin "1..1" -- "0..n" Lopin : lopin
 
+
 Utilisateur "0..n" -- "1..n" Jardin : administrateurs
 Utilisateur "0..n" -- "1..n" Jardin : membres
 
 Actualite "1..1" -- "0..n" Jardin : jardin
+Actualite "1..1" -- "0..n" Utilisateur : auteur
 
 Adresse "1..n" -- "1..1" Jardin : adresse
 Adresse "1..n" -- "1..1" Lopin : adresse

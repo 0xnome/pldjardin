@@ -17,16 +17,17 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url, include
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import routers
 
 from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
-from apps.gensdujardin.views import UtilisateurViewSet
+from apps.gensdujardin.views import UserViewSet
 from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
 from apps.actions.views import ActionViewSet, TypeActionViewSet
-
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 router = routers.DefaultRouter()
-router.register(r'utilisateurs', UtilisateurViewSet )
+router.register(r'utilisateurs', UserViewSet )
 router.register(r'jardins', JardinViewSet )
 router.register(r'adresses', AdresseViewSet )
 router.register(r'lopins', LopinViewSet)
@@ -42,6 +43,9 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token),
 ]
 
 if settings.DEBUG:

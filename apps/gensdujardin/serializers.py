@@ -1,18 +1,26 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from apps.gensdujardin.models import Utilisateur
+from apps.gensdujardin.models import Profil
+from apps.jardin.serializers import JardinSerializer
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class ProfilSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profil
+        fields = ('id', 'ville', 'presentation', 'avatar', 'user')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    profil = ProfilSerializer(many=False)
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+        fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'profil')
 
 
-class UtilisateurSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-
+class InscriptionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Utilisateur
-        fields = ('id', 'ville', 'description', 'user')
+        model = User
+        fields = ('username', 'password', 'email')
 

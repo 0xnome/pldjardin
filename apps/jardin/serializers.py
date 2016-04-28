@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 
 
@@ -7,35 +8,32 @@ from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 """
 
 
-class AdresseSerializer(serializers.HyperlinkedModelSerializer):
+class AdresseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
         fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat')
 
 
-class JardinSerializer(serializers.HyperlinkedModelSerializer):
-    adresse = AdresseSerializer(many=False, read_only=True)
-
+class JardinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'horaire', 'image', 'description', 'restreint', 'adresse')
+        fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'compostier', 'adresse', 'administrateurs', 'membres')
 
 
-class LopinSerializer(serializers.HyperlinkedModelSerializer):
-    adresse = AdresseSerializer(many=False, read_only=True)
-
+class LopinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lopin
         fields = ('id', 'adresse', 'jardin', 'nom', 'description')
 
 
-class ActualiteSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Actualite
-        fields = ('id', 'jardin', 'texte', 'date_creation')
-
-
-class PlanteSerializer(serializers.HyperlinkedModelSerializer):
+class PlanteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plante
         fields = ('id', 'lopin', 'nom', 'image', 'espece', 'description')
+
+
+class ActualiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actualite
+        fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
+
