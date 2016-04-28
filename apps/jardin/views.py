@@ -120,6 +120,19 @@ class ActualiteViewSet(viewsets.ModelViewSet):
     queryset = Actualite.objects.all()
     serializer_class = ActualiteSerializer
 
+    @detail_route(methods=["GET"])
+    def jardin(self, request, pk=None):
+        actualite = self.get_object()
+        jardin = actualite.jardin
+        serializer = JardinSerializer(jardin)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def auteur(self, request, pk=None):
+        actualite = self.get_object()
+        auteur = actualite.auteur
+        serializer = UserSerializer(auteur)
+        return Response(serializer.data)
 
 class PlanteViewSet(viewsets.ModelViewSet):
     """
