@@ -4,7 +4,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from apps.gensdujardin.models import Profil
-from apps.gensdujardin.serializers import UserSerializer, UserAvecMembreJardinsSerializer
+from apps.gensdujardin.serializers import UserSerializer
 from apps.jardin.serializers import JardinSerializer
 
 

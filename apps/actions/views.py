@@ -12,7 +12,7 @@ class ActionViewSet(viewsets.ModelViewSet):
     serializer_class = ActionSerializer
 
 
-class TypeActionViewSet(viewsets.ModelViewSet):
+class TypeActionViewSet(viewsets.ReadOnlyModelViewSet):
     """
         list, create, retreive, update and delete
     """

@@ -4,6 +4,7 @@ from django.db import models
 
 from apps.gensdujardin.models import Profil
 
+
 def content_file_name_jardin(instance, filename):
     """
     Chemin pour l'image du jadin
@@ -33,6 +34,7 @@ class Adresse(models.Model):
     def __str__(self):
         return "{} - {} - {}".format(self.rue, self.ville, self.code_postal)
 
+
 def create_default_adresse():
     return Adresse(ville="Villeurbane", rue="20 avenue Albert Einstein", code_postal='69100')
 
@@ -42,9 +44,8 @@ class Jardin(models.Model):
     administrateurs = models.ManyToManyField(User, related_name="admin_jardins")
     membres = models.ManyToManyField(User, related_name="membre_jardins")
 
-
     nom = models.CharField(max_length=50, help_text="Nom du jardin")
-    site = models.CharField(max_length=200, help_text="Le site web du jardin",blank=True, null=True)
+    site = models.CharField(max_length=200, help_text="Le site web du jardin", blank=True, null=True)
     contact = models.EmailField(help_text="Email de contact du jardin, ou le mail d'un responsable")
     horaire = models.TextField()
     # TODO mettre une image par defaut a la place du null false
@@ -56,8 +57,9 @@ class Jardin(models.Model):
     def __str__(self):
         return "{} - {}".format(self.nom, self.adresse.ville)
 
+
 class Actualite(models.Model):
-    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE)
+    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, related_name="actualites")
     # TODO restreindre aux admin d'un jardin
     auteur = models.ForeignKey(User)
     texte = models.TextField(blank=False, null=False)
@@ -71,7 +73,7 @@ class Actualite(models.Model):
 class Lopin(models.Model):
     adresse = models.ForeignKey(Adresse,
                                 help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
-    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True)
+    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True, related_name='lopins')
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
