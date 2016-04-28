@@ -96,13 +96,7 @@ class PlantePermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # GET HEAD OPTION
         if request.method in permissions.SAFE_METHODS:
-            if obj.lopin.jardin:
-                if request.user in obj.lopin.jardin.membres.all():
-                    return True
-                elif obj.lopin.jardin.restreint:
-                    return False
-            else:
-                return True
+            return True
         # PUT PATCH POST DELETE
         else:
             if obj.lopin.jardin:
