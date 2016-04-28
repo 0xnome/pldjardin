@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 from apps.jardin.models import Jardin, Lopin, Plante
 
-
+# TODO: checker que les auteur sont bien les utilisateurs courants
 class CommentaireJardinPermission(permissions.BasePermission):
     """
     Global permissions for CommentaireJardin
@@ -44,7 +44,7 @@ class CommentaireJardinPermission(permissions.BasePermission):
         # l'utilisateur non connecté n'a pas de droit de modification
         return False
 
-
+# TODO: checker que les auteur sont bien les utilisateurs courants
 class CommentaireLopinPermission(permissions.BasePermission):
     """
        Global permissions for CommentaireLopin
@@ -81,7 +81,6 @@ class CommentaireLopinPermission(permissions.BasePermission):
                     # un utilisateur peut commenter un lopin sans jardin
                     else:
                         return True
-
                 # pour le test de l'api rest
                 else:
                     return True
@@ -91,7 +90,7 @@ class CommentaireLopinPermission(permissions.BasePermission):
         # l'utilisateur non connecté n'a pas de droit de modification
         return False
 
-
+# TODO: checker que les auteur sont bien les utilisateurs courants
 class CommentairePlantePermission(permissions.BasePermission):
     """
        Global permissions for CommentairePlante

@@ -29,6 +29,7 @@ class JardinPermission(permissions.BasePermission):
         # path put delete
         return True
 
+# TODO: empecher un admin de donner le lopin a un autre jardin dont il n'est pas admin
 class LopinPermission(permissions.BasePermission):
     """
     Global permissions for lopins
@@ -87,7 +88,7 @@ class LopinPermission(permissions.BasePermission):
 
 
 
-
+# TODO: empecher un membre de donner la plante a un autre jardin dont il n'est pas admin
 class PlantePermission(permissions.BasePermission):
     """
     Global permissions for plantes
@@ -154,10 +155,10 @@ class ActualitePermission(permissions.BasePermission):
                 return False
         return False
 
+    # TODO: empecher un admin d'attribuer son actualite a un autre jardin
     def has_permission(self, request, view):
         # get head option
         if request.method in permissions.SAFE_METHODS:
-
             return True
         # utilisateur connecté
         elif permissions.IsAuthenticated.has_permission(self,request,view):
@@ -165,7 +166,7 @@ class ActualitePermission(permissions.BasePermission):
                 if "jardin" in request.data:
                     id = int(request.data["jardin"])
                     # Un admin seulement peut crée une actualite sur son jardin
-                    if request.user in Jardin.objects.get(pk=id).membres.all():
+                    if request.user in Jardin.objects.get(pk=id).administrateurs.all():
                         return True
                 # necessaire pour le test de l'api
                 elif not ("jardin" in request.data):
