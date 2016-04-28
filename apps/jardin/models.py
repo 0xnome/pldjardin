@@ -73,7 +73,7 @@ class Actualite(models.Model):
 class Lopin(models.Model):
     adresse = models.ForeignKey(Adresse,
                                 help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
-    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True)
+    jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True, related_name='lopins')
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
