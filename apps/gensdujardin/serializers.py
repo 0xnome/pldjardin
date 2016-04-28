@@ -11,12 +11,27 @@ class ProfilSerializer(serializers.ModelSerializer):
         fields = ('id', 'ville', 'presentation', 'avatar', 'user')
 
 
-class UserSerializer(serializers.ModelSerializer):
-    profil = ProfilSerializer(many=False)
+class UserFullSerializer(serializers.ModelSerializer):
+    profil = ProfilSerializer()
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'profil')
+        fields = ('id', 'profil', 'last_login', 'username', 'first_name', 'last_name', 'email', 'date_joined' )
+
+
+class UserUnauthenticatedSerializer(serializers.ModelSerializer):
+    profil = ProfilSerializer()
+
+    class Meta:
+        model = User
+        fields = ('id', 'profil', 'username', 'first_name', 'last_name')
+
+class UserAuthenticatedSerializer(serializers.ModelSerializer):
+    profil = ProfilSerializer()
+
+    class Meta:
+        model = User
+        fields = ('id', 'profil', 'username', 'first_name', 'last_name')
 
 
 class InscriptionSerializer(serializers.ModelSerializer):

@@ -7,7 +7,7 @@ from apps.commentaires.serializer import CommentairePlanteSerializer, Commentair
     CommentaireLopinSerializer
 from apps.commentaires.permissions import CommentaireJardinPermission, CommentaireLopinPermission,\
     CommentairePlantePermission
-from apps.gensdujardin.serializers import UserSerializer
+from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.serializers import PlanteSerializer, JardinSerializer, LopinSerializer
 
 
@@ -23,7 +23,7 @@ class CommentairePlanteViewSet(viewsets.ModelViewSet):
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
         adresse = commentaire.adresse
-        serializer = UserSerializer(adresse)
+        serializer = UserFullSerializer(adresse)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -45,7 +45,7 @@ class CommentaireJardinViewSet(viewsets.ModelViewSet):
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
         adresse = commentaire.adresse
-        serializer = UserSerializer(adresse)
+        serializer = UserFullSerializer(adresse)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -68,7 +68,7 @@ class CommentaireLopinViewSet(viewsets.ModelViewSet):
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
         adresse = commentaire.adresse
-        serializer = UserSerializer(adresse)
+        serializer = UserFullSerializer(adresse)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])

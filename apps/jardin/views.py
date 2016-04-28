@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from apps.actions.serializers import ActionSerializer
 from apps.commentaires.serializer import CommentaireJardinSerializer, CommentaireLopinSerializer, \
     CommentairePlanteSerializer
-from apps.gensdujardin.serializers import UserSerializer
+from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin import permissions
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinSerializer, AdresseSerializer, LopinSerializer, ActualiteSerializer, \
@@ -40,14 +40,14 @@ class JardinViewSet(viewsets.ModelViewSet):
     def membres(self, request, pk=None):
         jardin = self.get_object()
         membres = jardin.membres.all()
-        serializer = UserSerializer(membres, many=True)
+        serializer = UserFullSerializer(membres, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
     def administrateurs(self, request, pk=None):
         jardin = self.get_object()
         administrateurs = jardin.administrateurs.all()
-        serializer = UserSerializer(administrateurs, many=True)
+        serializer = UserFullSerializer(administrateurs, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -146,7 +146,7 @@ class ActualiteViewSet(viewsets.ModelViewSet):
     def auteur(self, request, pk=None):
         actualite = self.get_object()
         auteur = actualite.auteur
-        serializer = UserSerializer(auteur)
+        serializer = UserFullSerializer(auteur)
         return Response(serializer.data)
 
 class PlanteViewSet(viewsets.ModelViewSet):
