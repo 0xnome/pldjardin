@@ -66,6 +66,21 @@ class AdresseViewSet(viewsets.ModelViewSet):
     queryset = Adresse.objects.all()
     serializer_class = AdresseSerializer
 
+    @detail_route(methods=["GET"])
+    def jardins(self, request, pk=None):
+        adresse = self.get_object()
+        jardins = adresse.jardins.all()
+        serializer = JardinSerializer(jardins, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def lopins(self, request, pk=None):
+        # TODO union avec les lopins du jardin a cette adresse ?
+        adresse = self.get_object()
+        lopins = adresse.lopins.all()
+        serializer = LopinSerializer(lopins, many=True)
+        return Response(serializer.data)
+
 
 class LopinViewSet(viewsets.ModelViewSet):
     """
