@@ -60,7 +60,6 @@ class Jardin(models.Model):
 
 class Actualite(models.Model):
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, related_name="actualites")
-    # TODO restreindre aux admin d'un jardin
     auteur = models.ForeignKey(User)
     texte = models.TextField(blank=False, null=False)
     date_creation = models.DateTimeField(help_text="Date de création", verbose_name="Date de création",

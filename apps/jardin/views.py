@@ -1,5 +1,10 @@
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 
+from apps.commentaires.serializer import CommentaireJardinSerializer, CommentaireLopinSerializer, \
+    CommentairePlanteSerializer
+from apps.gensdujardin.serializers import UserSerializer
 from apps.jardin import permissions
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinSerializer, AdresseSerializer, LopinSerializer, ActualiteSerializer, \
@@ -15,6 +20,34 @@ class JardinViewSet(viewsets.ModelViewSet):
     permission_classes = (JardinPermission,)
     queryset = Jardin.objects.all()
     serializer_class = JardinSerializer
+
+    @detail_route(methods=["GET"])
+    def commentaires(self, request, pk=None):
+        jardin = self.get_object()
+        commentaires = jardin.commentaires.all()
+        serializer = CommentaireJardinSerializer(commentaires, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def actualites(self, request, pk=None):
+        jardin = self.get_object()
+        actualites = jardin.actualites.all()
+        serializer = ActualiteSerializer(actualites, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def membres(self, request, pk=None):
+        jardin = self.get_object()
+        membres = jardin.membres.all()
+        serializer = UserSerializer(membres, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def administrateurs(self, request, pk=None):
+        jardin = self.get_object()
+        administrateurs = jardin.administrateurs.all()
+        serializer = UserSerializer(administrateurs, many=True)
+        return Response(serializer.data)
 
 
 class AdresseViewSet(viewsets.ModelViewSet):
@@ -35,6 +68,13 @@ class LopinViewSet(viewsets.ModelViewSet):
     queryset = Lopin.objects.all()
     serializer_class = LopinSerializer
 
+    @detail_route(methods=["GET"])
+    def commentaires(self, request, pk=None):
+        lopin = self.get_object()
+        commentaires = lopin.commentaires.all()
+        serializer = CommentaireLopinSerializer(commentaires, many=True)
+        return Response(serializer.data)
+
 
 class ActualiteViewSet(viewsets.ModelViewSet):
     """
@@ -54,3 +94,9 @@ class PlanteViewSet(viewsets.ModelViewSet):
     queryset = Plante.objects.all()
     serializer_class = PlanteSerializer
 
+    @detail_route(methods=["GET"])
+    def commentaires(self, request, pk=None):
+        plante = self.get_object()
+        commentaires = plante.commentaires.all()
+        serializer = CommentairePlanteSerializer(commentaires, many=True)
+        return Response(serializer.data)
