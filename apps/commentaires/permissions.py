@@ -1,6 +1,6 @@
-git from rest_framework import permissions
+from rest_framework import permissions
 
-from apps.jardin.models import Jardin, Lopin
+from apps.jardin.models import Jardin, Lopin, Plante
 
 
 class CommentaireJardinPermission(permissions.BasePermission):
@@ -101,12 +101,14 @@ class CommentairePlantePermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # utilisateur connecté
-        elif permissions.IsAuthenticated:
+        elif permissions.IsAuthenticated.has_permission(self, request, view):
             if request.method == "DELETE":
                 if request.user == obj.auteur:
                     return True
-                elif request.user in obj.jardin.administrateurs.all():
-                    return True
+                elif obj.plante.lopin.jardin:
+                    if request.user in obj.plante.lopin.jardin.administrateurs.all():
+                        return True
+                return False
         return False
 
     def has_permission(self, request, view):
@@ -116,14 +118,17 @@ class CommentairePlantePermission(permissions.BasePermission):
         # utilisateur connecté
         elif permissions.IsAuthenticated.has_permission(self, request, view):
             if request.method == "POST":
-                if "jardin" in request.data:
-                    id = int(request.data["jardin"])
-                    # jardin non restreint
-                    if not (Jardin.objects.get(pk=id).restreint):
+                if "plante" in request.data:
+                    jardin = Plante.objects.get(pk=int(request.data["plante"])).lopin.jardin
+                    if jardin:
+                        if not jardin.restreint:
+                            return True
+                        elif request.user in jardin.membres.all():
+                            return True
+                    # un utilisateur peut commenter une plante sans jardin
+                    else:
                         return True
-                    # utilisateur membre du jardin restreint
-                    elif request.user in Jardin.objects.get(pk=id).membres.all():
-                        return True
+
                 # pour le test de l'api rest
                 else:
                     return True
@@ -132,4 +137,3 @@ class CommentairePlantePermission(permissions.BasePermission):
                 return True
         # l'utilisateur non connecté n'a pas de droit de modification
         return False
-
