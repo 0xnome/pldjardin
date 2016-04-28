@@ -8,13 +8,18 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 
 from apps.gensdujardin.serializers import UserSerializer, InscriptionSerializer
-from apps.jardin.serializers import JardinSerializer
 
+from apps.jardin.serializers import JardinSerializer
+from rest_framework import viewsets
+from apps.gensdujardin.serializers import UserSerializer
+from apps.gensdujardin.permission import UtilisateurPermission
 
 class UserViewSet(viewsets.ModelViewSet):
     """
         list, create, retreive, update and delete
     """
+
+    permission_classes = (UtilisateurPermission,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
