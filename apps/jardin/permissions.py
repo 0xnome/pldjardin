@@ -12,14 +12,22 @@ class JardinPermission(permissions.BasePermission):
 
         if request.method in permissions.SAFE_METHODS:
             return True
-        else:
+        elif permissions.IsAuthenticated.has_permission(self,request,view):
             return request.user in obj.administrateurs.all()
+        return False
 
     def has_permission(self, request, view):
+        # get option head
         if request.method in permissions.SAFE_METHODS:
             return True
+        # un utilisateur ne peut cree un jardin que si il est connecté
         if request.method == "POST":
-            return True
+            if permissions.IsAuthenticated.has_permission(self,request,view):
+                return True
+            else:
+                return False
+        # path put delete
+        return True
 
 class LopinPermission(permissions.BasePermission):
     """
