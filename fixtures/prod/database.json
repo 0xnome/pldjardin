@@ -395,5 +395,26 @@
         "espece": "Raphanus sativus",
         "description": "Toujours plus de radis chinois !"
     }
+},
+{
+    "model": "actions.typeaction",
+    "pk": 1,
+    "fields":{
+        "nom":"arroser"
+    }
+},
+{
+    "model": "actions.typeaction",
+    "pk": 2,
+    "fields":{
+        "nom":"elaguer"
+    }
+},
+{
+    "model": "actions.typeaction",
+    "pk": 3,
+    "fields": {
+        "nom": "ceuillir"
+    }
 }
 ]
