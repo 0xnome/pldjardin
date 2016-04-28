@@ -6,6 +6,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
+from rest_framework import status
 
 from apps.actions.serializers import ActionSerializer
 from apps.gensdujardin.serializers import UserSerializer, InscriptionSerializer
@@ -23,6 +24,15 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (UtilisateurPermission,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @list_route(methods=["GET"])
+    def moi(self, request, pk=None):
+        user = request.user
+        if user.is_authenticated():
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        return Response("Vous devez être connecté pour acceder à cette ressource",
+                        status=status.HTTP_403_FORBIDDEN)
 
     @detail_route(methods=["GET"])
     def membre_jardins(self, request, pk=None):
@@ -59,4 +69,4 @@ class UserViewSet(viewsets.ModelViewSet):
             }
             return HttpResponse(json.dumps(token), content_type="application/json", status=201)
 
-        return HttpResponse(status=400)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
