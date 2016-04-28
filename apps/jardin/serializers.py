@@ -36,3 +36,4 @@ class ActualiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actualite
         fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
+

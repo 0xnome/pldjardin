@@ -15,14 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
     profil = ProfilSerializer(many=False)
 
     class Meta:
-        model = get_user_model()
+        model = User
         fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'profil')
 
-    def create(self, validated_data):
-        user = get_user_model().objects.create(
-            username=validated_data['username']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
 
-        return user
+class InscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email')
+
