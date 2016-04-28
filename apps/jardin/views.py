@@ -108,7 +108,7 @@ class LopinViewSet(viewsets.ModelViewSet):
     @detail_route(methods=["GET"])
     def plantes(self, request, pk=None):
         lopin = self.get_object()
-        plantes = lopin.plantes
+        plantes = lopin.plantes.all()
         serializer = PlanteSerializer(plantes, many=True)
         return Response(serializer.data)
 
