@@ -7,6 +7,7 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 
+from apps.actions.serializers import ActionSerializer
 from apps.gensdujardin.serializers import UserSerializer, InscriptionSerializer
 
 from apps.jardin.serializers import JardinSerializer
@@ -35,6 +36,13 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         jardins = user.admin_jardins.all()
         serializer = JardinSerializer(jardins, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def actions(self, request, pk=None):
+        user = self.get_object()
+        actions = user.actions.all()
+        serializer = ActionSerializer(actions, many=True)
         return Response(serializer.data)
 
     @list_route(methods=["POST"])

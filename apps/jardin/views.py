@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
+from apps.actions.serializers import ActionSerializer
 from apps.commentaires.serializer import CommentaireJardinSerializer, CommentaireLopinSerializer, \
     CommentairePlanteSerializer
 from apps.gensdujardin.serializers import UserSerializer
@@ -49,6 +50,13 @@ class JardinViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(administrateurs, many=True)
         return Response(serializer.data)
 
+    @detail_route(methods=["GET"])
+    def adresse(self, request, pk=None):
+        jardin = self.get_object()
+        adresse = jardin.adresse
+        serializer = AdresseSerializer(adresse)
+        return Response(serializer.data)
+
 
 class AdresseViewSet(viewsets.ModelViewSet):
     """
@@ -73,6 +81,27 @@ class LopinViewSet(viewsets.ModelViewSet):
         lopin = self.get_object()
         commentaires = lopin.commentaires.all()
         serializer = CommentaireLopinSerializer(commentaires, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def actions(self, request, pk=None):
+        lopin = self.get_object()
+        actions = lopin.actions.all()
+        serializer = ActionSerializer(actions, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def adresse(self, request, pk=None):
+        lopin = self.get_object()
+        adresse = lopin.adresse
+        serializer = AdresseSerializer(adresse)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def jardin(self, request, pk=None):
+        lopin = self.get_object()
+        jardin = lopin.jardin
+        serializer = JardinSerializer(jardin)
         return Response(serializer.data)
 
 
