@@ -146,8 +146,8 @@
         "ville": "Lyon",
         "code_postal": "69009",
         "rue": "204 avenue Barth\u00e9l\u00e9my Buyer",
-        "long": "45.766572",
-        "lat": "4.788235"
+        "long": "4.788235",
+        "lat": "45.766572"
     }
 },
 {
@@ -157,8 +157,8 @@
         "ville": "Villeurbanne",
         "code_postal": "69100",
         "rue": "6 Avenue des Arts",
-        "long": "45.783926",
-        "lat": "4.872306"
+        "long": "4.872306",
+        "lat": "45.783926"
     }
 },
 {
