@@ -8,7 +8,13 @@ from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 """
 
 
-class AdresseSerializer(serializers.ModelSerializer):
+class AdresseFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Adresse
+        fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat', 'jardins', 'lopins')
+
+
+class AdresseUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
         fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat')

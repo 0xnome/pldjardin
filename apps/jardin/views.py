@@ -11,8 +11,9 @@ from apps.commentaires.serializer import CommentaireJardinSerializer, Commentair
     CommentairePlanteSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-from apps.jardin.serializers import JardinFullSerializer, AdresseSerializer, LopinFullSerializer, ActualiteSerializer, \
-    PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer
+from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteSerializer, \
+    PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
+    AdresseUpdateSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
 
 
@@ -72,13 +73,19 @@ class JardinViewSet(viewsets.ModelViewSet):
     def adresse(self, request, pk=None):
         jardin = self.get_object()
         adresse = jardin.adresse
-        serializer = AdresseSerializer(adresse)
+        serializer = AdresseFullSerializer(adresse)
         return Response(serializer.data)
 
 
 class AdresseViewSet(viewsets.ModelViewSet):
     queryset = Adresse.objects.all()
-    serializer_class = AdresseSerializer
+    serializer_class = AdresseFullSerializer
+
+    def get_serializer_class(self):
+        if self.action == "update" or self.action == "partial_update":
+            return AdresseUpdateSerializer
+        else:
+            return AdresseFullSerializer
 
     @detail_route(methods=["GET"])
     def jardins(self, request, pk=None):
@@ -131,7 +138,7 @@ class LopinViewSet(viewsets.ModelViewSet):
     def adresse(self, request, pk=None):
         lopin = self.get_object()
         adresse = lopin.adresse
-        serializer = AdresseSerializer(adresse)
+        serializer = AdresseFullSerializer(adresse)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])

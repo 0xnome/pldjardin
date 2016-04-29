@@ -3,16 +3,17 @@ import os
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.text import slugify
 
 from apps.gensdujardin.models import Profil
 
 
 def content_file_name_jardin(jardin, filename):
-    return os.path.join(['jardins', jardin.id + "_" + jardin.nom, filename])
+    return os.path.join(['jardins', jardin.id + "_" + slugify(jardin.nom), filename])
 
 
 def content_file_name_plante(plante, filename):
-    return os.path.join(['plantes', plante.id + "_" + plante.nom, filename])
+    return os.path.join(['plantes', plante.id + "_" + slugify(plante.nom), filename])
 
 
 class Adresse(models.Model):

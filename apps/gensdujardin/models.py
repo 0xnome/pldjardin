@@ -1,11 +1,14 @@
+import os
+
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.utils.text import slugify
 
 
 def content_file_name(instance, filename):
-    return '/'.join(['avatars', instance.user.username, filename])
+    return os.path.join(['avatars', instance.id + "_" + slugify(instance.user.username), filename])
 
 
 class  Profil(models.Model):

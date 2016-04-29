@@ -27,6 +27,22 @@ class LopinPermission(permissions.IsAuthenticatedOrReadOnly):
         # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
         return obj.jardin is None or request.user in obj.jardin.administrateurs.all()
 
+    def has_permission(self, request, view):
+        if (request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated()):
+            if (request.method == "POST" and "jardin" in request.data and request.data["jardin"] != ""):
+                try:
+                    jardin = Jardin.objects.get(pk=int(request.data["jardin"]))
+                    return request.user in jardin.administrateurs.all()
+                except:
+                    return False
+            # DELETE PUT PATCH et jardin vide
+            else:
+                return True
+        else:
+            return False
+
 
 class PlantePermission(permissions.IsAuthenticatedOrReadOnly):
     """
@@ -49,6 +65,24 @@ class PlantePermission(permissions.IsAuthenticatedOrReadOnly):
         else:
             # On peut tout faire sur un plante d'un lopin public
             return True
+
+    def has_permission(self, request, view):
+        if (request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated()):
+            if (request.method == "POST" and "lopin" in request.data):
+                try:
+                    lopin = Lopin.objects.get(pk=int(request.data["lopin"]))
+                    return (lopin.jardin is None
+                            or not lopin.jardin.restreint
+                            or request.user in lopin.jardin.membres.all())
+                except:
+                    return False
+            # DELETE PUT PATCH
+            else:
+                return True
+        else:
+            return False
 
 
 class ActualitePermission(permissions.BasePermission):

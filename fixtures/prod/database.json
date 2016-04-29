@@ -105,7 +105,7 @@
     "fields": {
         "user": 2,
         "ville": "Villeurbanne",
-        "avatar": "avatars/SamanthaL/User_Samantha_Lenoir.jpg",
+        "avatar": "avatars/2_samanthal/User_Samantha_Lenoir.jpg",
         "presentation": ""
     }
 },
@@ -115,7 +115,7 @@
     "fields": {
         "user": 3,
         "ville": "Lyon",
-        "avatar": "avatars/Nicoco/User_Nicolas_Cage.jpg",
+        "avatar": "avatars/3_nicoco/User_Nicolas_Cage.jpg",
         "presentation": "Pour me reposer de ma carri\u00e8re \u00e0 Hollywood, j'ai d\u00e9cid\u00e9 de mettre la main au vert en participant \u00e0 un jardin collectif pr\u00e8s de chez moi. Discr\u00e9tion requise, merci."
     }
 },
@@ -125,7 +125,7 @@
     "fields": {
         "user": 4,
         "ville": "Lyon",
-        "avatar": "avatars/Hubernation/User_Hubert_Dupont.jpg",
+        "avatar": "avatars/4_hubernation/User_Hubert_Dupont.jpg",
         "presentation": "Retrait\u00e9 depuis peu, je passe maintenant mon temps libre \u00e0 jardiner. J'aide \u00e9galement \u00e0 la gestion du jardin Champvert !\r\nMa plante pr\u00e9f\u00e9r\u00e9e c'est le raisin pour la vinasse ! hahaha (c'est de l'humour)"
     }
 },
@@ -135,7 +135,7 @@
     "fields": {
         "user": 5,
         "ville": "Lyon",
-        "avatar": "avatars/JoBo/User_Jose_Bove.jpg",
+        "avatar": "avatars/5_jobo/User_Jose_Bove.jpg",
         "presentation": "L\u00e0, j'am\u00e8ne deux trucs: Hollywood (chewing-gum) et M&Ms. (...) L\u00e0-dedans, on ne le voit pas marqu\u00e9, E171, ce sont des nanoparticules, le dioxyde de titane. Pour rendre \u00e7a plus grand, plus brillant, l'agro-industrie, Mars, cette entreprise \u00e9norme, a rajout\u00e9 ce produit.\r\nLes seules \u00e9tudes, qui ont \u00e9t\u00e9 faites par des laboratoires fran\u00e7ais et suisses et ont montr\u00e9 qu'il y avait des risques de cancer car ces nanoparticules, aujourd'hui, \u00e7a a des cons\u00e9quences graves.\r\nJe dis aux gens qui nous regardent: boycottez ces produits, vous n'avez pas besoin de bouffer cette merde!"
     }
 },
@@ -170,7 +170,7 @@
         "site": "http://www.i-lyon9.com/assos-156.html",
         "contact": "champvert@mail.com",
         "horaire": "Lundi : 14h / 18h\r\nMardi : 9h / 12h et 16h /  18h\r\nMercredi :  9h/12h et 13h30/18h\r\nJeudi: 9h /12 h et 13h30 / 18h\r\nVendredi : 14h / 17h30",
-        "image": "images-jardins/Jardin collectif de ChampvertLyon/Jardin_champvert.jpg",
+        "image": "jardins/1_jardin-collectif-de-champvert/Jardin_champvert.jpg",
         "description": "Il s'agit d'un jardin partag\u00e9 p\u00e9dagogique. \r\nSa gestion est assur\u00e9e par le Centre Social de Champvert. Pour plus d'informations, vous pouvez le contacter. \r\nA l\u2019extr\u00e9mit\u00e9 du parc les enfants font des exp\u00e9riences de jardinage sur quelques carr\u00e9s. C\u2019est le centre de loisirs qui encadre les activit\u00e9s des jardiniers en herbe.",
         "restreint": false,
         "composteur": true,
@@ -193,7 +193,7 @@
         "site": "https://ledouavert.wordpress.com/",
         "contact": "contact@douavert.fr",
         "horaire": "Les jeudis de 15h \u00e0 17h",
-        "image": "images-jardins/Le Doua VertVilleurbanne/jardin_douavert.jpg",
+        "image": "images-jardins/2_le-doua-vert/jardin_douavert.jpg",
         "description": "Un promeneur jette un coup d\u2019\u0153il aux fleurs de courge, tandis qu\u2019un autre arrache quelques herbes autour des jeunes pousses d\u2019oignons. Pour le promeneur, c\u2019est d\u00e9coratif. Pour celui qui aime mettre ses mains dans la terre, c\u2019est une bonne occasion. Et c\u2019est tout ? \u00c7a vaudrait la peine de d\u00e9penser son \u00e9nergie pour un \u00ab truc \u00bb d\u00e9coratif et divertissant ?\r\n\r\nMais pour le promeneur, c\u2019est aussi une occasion de se rappeler comment est produite sa nourriture. Parce que les lieux o\u00f9 il ach\u00e8te \u00e0 manger sont si loin des lieux o\u00f9 la nourriture a \u00e9t\u00e9 produite qu\u2019il a tendance \u00e0 oublier que ce qu\u2019il met dans sa bouche est sorti de la terre en plusieurs semaines. Et donc que ses choix, ce qu\u2019il mange, a un impact sur ce qui l\u2019entoure.",
         "restreint": false,
         "composteur": true,
@@ -292,7 +292,7 @@
     "fields": {
         "lopin": 1,
         "nom": "Tomate",
-        "image": "images-jardins/plantes/TomateLyon/tomate.png",
+        "image": "plantes/1_tomate/tomate.png",
         "espece": "Solanum lycopersicum",
         "description": ""
     }
@@ -303,7 +303,7 @@
     "fields": {
         "lopin": 1,
         "nom": "Courgette",
-        "image": "images-jardins/plantes/CourgetteLyon/courgette.jpg",
+        "image": "plantes/2_courgette/courgette.jpg",
         "espece": "Cucurbita pepo",
         "description": ""
     }
@@ -314,7 +314,7 @@
     "fields": {
         "lopin": 2,
         "nom": "Bleuet",
-        "image": "images-jardins/plantes/BleuetLyon/bleuet.JPG",
+        "image": "plantes/3_bleuet/bleuet.JPG",
         "espece": "Centaurea cyanus",
         "description": "Faut pas les \u00e9craser ils sont tout petit"
     }
@@ -325,7 +325,7 @@
     "fields": {
         "lopin": 3,
         "nom": "Coquelicot",
-        "image": "images-jardins/plantes/CoquelicotLyon/Coquelicot.JPG",
+        "image": "plantes/4_coquelicot/Coquelicot.JPG",
         "espece": "Papaver rhoeas",
         "description": "Ne pas trop les arroser. une fois par semaine \u00e7a suffit !"
     }
@@ -336,7 +336,7 @@
     "fields": {
         "lopin": 3,
         "nom": "Coquelicot",
-        "image": "images-jardins/plantes/CoquelicotLyon/Coquelicot_fUQ2aAn.JPG",
+        "image": "plantes/5_coquelicot/Coquelicot_fUQ2aAn.JPG",
         "espece": "Papaver rhoeas",
         "description": "Pas trop les arroser. Une fois par semaine \u00e7a suffit."
     }
@@ -347,7 +347,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "images-jardins/plantes/TomateVilleurbanne/tomate.png",
+        "image": "plantes/6_tomate/tomate.png",
         "espece": "Solanum lycopersicum",
         "description": "A r\u00e9colter en \u00e9t\u00e9, bien rouge."
     }
@@ -358,7 +358,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "images-jardins/plantes/TomateVilleurbanne/tomate_X6ycDkt.png",
+        "image": "plantes/7_tomate/tomate_X6ycDkt.png",
         "espece": "Solanum lycopersicum",
         "description": "A r\u00e9colter en \u00e9t\u00e9, bien rouge."
     }
@@ -369,7 +369,7 @@
     "fields": {
         "lopin": 4,
         "nom": "Tomate",
-        "image": "images-jardins/plantes/TomateVilleurbanne/tomate_yNyc1zD.png",
+        "image": "plantes/8_tomate/tomate_yNyc1zD.png",
         "espece": "Solanum lycopersicum",
         "description": "A cueuillir bien rouge en \u00e9t\u00e9 !"
     }
@@ -380,7 +380,7 @@
     "fields": {
         "lopin": 5,
         "nom": "Radis",
-        "image": "images-jardins/plantes/RadisVilleurbanne/radis.jpg",
+        "image": "plantes/9_radis/radis.jpg",
         "espece": "Raphanus sativus",
         "description": "Radis chinois c'est cool."
     }
@@ -391,7 +391,7 @@
     "fields": {
         "lopin": 5,
         "nom": "Radis",
-        "image": "images-jardins/plantes/RadisVilleurbanne/radis_nzsILWH.jpg",
+        "image": "plantes/10_radis/radis_nzsILWH.jpg",
         "espece": "Raphanus sativus",
         "description": "Toujours plus de radis chinois !"
     }
@@ -415,6 +415,13 @@
     "pk": 3,
     "fields": {
         "nom": "ceuillir"
+    }
+},
+{
+    "model": "actions.typeaction",
+    "pk": 4,
+    "fields": {
+        "nom": "planter"
     }
 }
 ]
