@@ -205,7 +205,7 @@ def recherche(request):
         keywords = request.GET["q"]
 
     keywordlist = keywords.split()
-    
+
     class Results(object):
         def __init__(self, jardins=None, lopins=None, plantes=None, adresses=None):
             self.jardins = jardins
@@ -224,10 +224,10 @@ def recherche(request):
     adresses_query = Adresse.objects
 
     for keyword in keywordlist:
-        jardins_query.filter(filterjardins(keyword))
-        lopins_query.filter(filterlopins(keyword))
-        plantes_query.filter(filterplantes(keyword))
-        adresses_query.filter(filteradresses(keyword))
+        jardins_query = jardins_query.filter(filterjardins(keyword))
+        lopins_query = lopins_query.filter(filterlopins(keyword))
+        plantes_query = plantes_query.filter(filterplantes(keyword))
+        adresses_query = adresses_query.filter(filteradresses(keyword))
 
 
 
@@ -235,5 +235,6 @@ def recherche(request):
                       lopins=lopins_query,
                       plantes=plantes_query,
                       adresses=adresses_query)
+
     serializer = ResultsSerializer(results)
     return HttpResponse(content=JSONRenderer().render(serializer.data))
