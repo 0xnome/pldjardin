@@ -2,22 +2,23 @@ from rest_framework import permissions
 
 from apps.jardin.models import Jardin, Lopin, Plante
 
+
 # TODO: checker que les auteur sont bien les utilisateurs courants
-class CommentaireJardinPermission(permissions.BasePermission):
+# TODO: LOIC TU DOIS REPASSER DESSUS !!!
+class CommentaireJardinPermission(permissions.IsAuthenticatedOrReadOnly):
     """
     Global permissions for CommentaireJardin
     """
+
     def has_object_permission(self, request, view, obj):
         # get head option
         if request.method in permissions.SAFE_METHODS:
             return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(request,view):
-            if request.method == "DELETE":
-                if request.user == obj.auteur:
-                    return True
-                elif request.user in obj.jardin.administrateurs.all():
-                    return True
+        if request.method == "DELETE":
+            if request.user == obj.auteur:
+                return True
+            elif request.user in obj.jardin.administrateurs.all():
+                return True
         return False
 
     def has_permission(self, request, view):
@@ -25,7 +26,7 @@ class CommentaireJardinPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self,request,view):
+        elif permissions.IsAuthenticated.has_permission(self, request, view):
             if request.method == "POST":
                 if "jardin" in request.data:
                     id = int(request.data["jardin"])
@@ -38,23 +39,25 @@ class CommentaireJardinPermission(permissions.BasePermission):
                 # pour le test de l'api rest
                 else:
                     return True
-            #  DELETE PUT PATCH
+            # DELETE PUT PATCH
             else:
                 return True
         # l'utilisateur non connecté n'a pas de droit de modification
         return False
+
 
 # TODO: checker que les auteur sont bien les utilisateurs courants
 class CommentaireLopinPermission(permissions.BasePermission):
     """
        Global permissions for CommentaireLopin
     """
+
     def has_object_permission(self, request, view, obj):
         # get head option
         if request.method in permissions.SAFE_METHODS:
             return True
         # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self,request,view):
+        elif permissions.IsAuthenticated.has_permission(self, request, view):
             if request.method == "DELETE":
                 if request.user == obj.auteur:
                     return True
@@ -90,11 +93,13 @@ class CommentaireLopinPermission(permissions.BasePermission):
         # l'utilisateur non connecté n'a pas de droit de modification
         return False
 
+
 # TODO: checker que les auteur sont bien les utilisateurs courants
 class CommentairePlantePermission(permissions.BasePermission):
     """
        Global permissions for CommentairePlante
     """
+
     def has_object_permission(self, request, view, obj):
         # get head option
         if request.method in permissions.SAFE_METHODS:
