@@ -17,7 +17,7 @@ class AdresseSerializer(serializers.ModelSerializer):
 class JardinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composter', 'adresse', 'administrateurs', 'membres')
+        fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse', 'administrateurs', 'membres')
 
 
 class LopinSerializer(serializers.ModelSerializer):
