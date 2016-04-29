@@ -213,28 +213,29 @@ def recherche(request):
             self.plantes = plantes
             self.adresses = adresses
 
-    filterjardins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword))
-    filterlopins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword))
-    filterplantes = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(espece__icontains=keyword))
+    filterjardins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) |  Q(adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword))
+    filterlopins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword))| Q(adresse__ville__icontains=keyword) |  Q(adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword)
+    filterplantes = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(espece__icontains=keyword) | Q(lopin__adresse__ville__icontains=keyword) |  Q(lopin__adresse__rue__icontains=keyword) | Q(lopin__adresse__code_postal__icontains=keyword))
     filteradresses = lambda keyword: (Q(ville__icontains=keyword) | Q(rue__icontains=keyword) | Q(code_postal__icontains=keyword))
 
     jardins_query = Jardin.objects
     lopins_query = Lopin.objects
     plantes_query = Plante.objects
-    adresses_query = Adresse.objects
+    # adresses_query = Adresse.objects
 
     for keyword in keywordlist:
         jardins_query = jardins_query.filter(filterjardins(keyword))
         lopins_query = lopins_query.filter(filterlopins(keyword))
         plantes_query = plantes_query.filter(filterplantes(keyword))
-        adresses_query = adresses_query.filter(filteradresses(keyword))
+        # adresses_query = adresses_query.filter(filteradresses(keyword))
 
 
 
     results = Results(jardins=jardins_query,
                       lopins=lopins_query,
                       plantes=plantes_query,
-                      adresses=adresses_query)
+                      # adresses=adresses_query
+                      )
 
     serializer = ResultsSerializer(results)
     return HttpResponse(content=JSONRenderer().render(serializer.data))

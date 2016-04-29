@@ -12,7 +12,6 @@ class AdresseFullSerializer(serializers.ModelSerializer):
         model = Adresse
         fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat', 'jardins', 'lopins')
 
-
 class AdresseUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
@@ -65,8 +64,19 @@ class ActualiteSerializer(serializers.ModelSerializer):
         model = Actualite
         fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
 
+"""
+class AdresseFullWithSerializer(AdresseFullSerializer):
+    jardins = JardinFullSerializer(many=True)
+    lopins = LopinFullSerializer(many=True)
+"""
+
+class AdresseFullWithSerializer(AdresseFullSerializer):
+    jardins = JardinFullSerializer(many=True)
+    lopins = LopinFullSerializer(many=True)
+
+
 class ResultsSerializer(serializers.Serializer):
     jardins = JardinFullSerializer(many=True, read_only=True)
     lopins = LopinFullSerializer(many=True, read_only=True)
     plantes = PlanteFullSerializer(many=True, read_only=True)
-    adresses = AdresseFullSerializer(many=True, read_only=True)
+    # adresses = AdresseFullWithSerializer(many=True, read_only=True)
