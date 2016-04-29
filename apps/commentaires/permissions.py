@@ -12,7 +12,7 @@ class CommentaireJardinPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self,request,view):
+        elif permissions.IsAuthenticated.has_permission(request,view):
             if request.method == "DELETE":
                 if request.user == obj.auteur:
                     return True

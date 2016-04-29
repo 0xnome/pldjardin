@@ -9,25 +9,20 @@ class JardinPermission(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif permissions.IsAuthenticated.has_permission(self,request,view):
+        elif request.user and request.user.is_authenticated():
             return request.user in obj.administrateurs.all()
         return False
 
     def has_permission(self, request, view):
-        # get option head
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # un utilisateur ne peut cree un jardin que si il est connecté
         if request.method == "POST":
-            if permissions.IsAuthenticated.has_permission(self,request,view):
+            if request.user and request.user.is_authenticated():
                 return True
-            else:
-                return False
-        # path put delete
-        return True
+        else:
+            return True
+        return False
+
 
 # TODO: empecher un admin de donner le lopin a un autre jardin dont il n'est pas admin
 class LopinPermission(permissions.BasePermission):

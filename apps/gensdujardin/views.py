@@ -9,9 +9,10 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework import status
 
 from apps.actions.serializers import ActionSerializer
-from apps.gensdujardin.serializers import UserFullSerializer, InscriptionSerializer
+from apps.gensdujardin.serializers import UserFullSerializer, InscriptionSerializer, UserAuthenticatedSerializer, \
+    UserUnauthenticatedSerializer
 
-from apps.jardin.serializers import JardinSerializer
+from apps.jardin.serializers import JardinFullSerializer
 from rest_framework import viewsets
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.gensdujardin.permission import UtilisateurPermission
@@ -23,12 +24,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     permission_classes = (UtilisateurPermission,)
     queryset = User.objects.all()
-    serializer_class = UserFullSerializer
+    serializer_class = UserUnauthenticatedSerializer
 
     @list_route(methods=["GET"])
     def moi(self, request, pk=None):
         user = request.user
-        if user.is_authenticated():
+        if user is not None and user.is_authenticated():
             serializer = UserFullSerializer(user)
             return Response(serializer.data)
         return Response("{errors:[Vous devez être connecté pour acceder à cette ressource]}",
@@ -38,14 +39,14 @@ class UserViewSet(viewsets.ModelViewSet):
     def membre_jardins(self, request, pk=None):
         user = self.get_object()
         jardins = user.membre_jardins.all()
-        serializer = JardinSerializer(jardins, many=True)
+        serializer = JardinFullSerializer(jardins, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
     def admin_jardins(self, request, pk=None):
         user = self.get_object()
         jardins = user.admin_jardins.all()
-        serializer = JardinSerializer(jardins, many=True)
+        serializer = JardinFullSerializer(jardins, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])

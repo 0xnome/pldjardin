@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -5,21 +7,12 @@ from django.db import models
 from apps.gensdujardin.models import Profil
 
 
-def content_file_name_jardin(instance, filename):
-    """
-    Chemin pour l'image du jadin
-    Args:
-        instance:
-        filename:
-
-    Returns:
-
-    """
-    return '/'.join(['images-jardins', instance.nom + instance.adresse.ville, filename])
+def content_file_name_jardin(jardin, filename):
+    return os.path.join(['jardins', jardin.id + "_" + jardin.nom, filename])
 
 
-def content_file_name_plante(instance, filename):
-    return '/'.join(['plantes', instance.nom + instance.lopin.adresse.ville, filename])
+def content_file_name_plante(plante, filename):
+    return os.path.join(['plantes', plante.id + "_" + plante.nom, filename])
 
 
 class Adresse(models.Model):
@@ -41,6 +34,7 @@ def create_default_adresse():
 
 class Jardin(models.Model):
     adresse = models.ForeignKey(Adresse, related_name="jardins")
+    # TODO un administrateur DOIT etre un membre
     administrateurs = models.ManyToManyField(User, related_name="admin_jardins")
     membres = models.ManyToManyField(User, related_name="membre_jardins")
 
@@ -73,8 +67,11 @@ class Lopin(models.Model):
     adresse = models.ForeignKey(Adresse,related_name="lopins",
                                 help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin")
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True, related_name='lopins')
+
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
+
+    qrcode = None
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
@@ -88,6 +85,8 @@ class Plante(models.Model):
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
     espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
     description = models.TextField(blank=True, null=True)
+
+    qrcode = None
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)

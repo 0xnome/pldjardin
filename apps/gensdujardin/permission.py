@@ -9,7 +9,7 @@ class UtilisateurPermission(permissions.BasePermission):
 
 
     def has_permission(self, request, view):
-        if permissions.IsAuthenticated.has_permission(self,request,view):
+        if request.user and request.user.is_authenticated():
             # un utlisateur ne peut pas en cree si il est deja connecté
             if request.method == "POST":
                 return False
@@ -32,7 +32,7 @@ class UtilisateurPermission(permissions.BasePermission):
         elif request.method == "POST":
             return True
         # DELETE PUT PATCH
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
+        elif request.user and request.user.is_authenticated():
             if request.method == "DELETE":
                 return False
             elif request.method in ["PUT","PATCH"]:

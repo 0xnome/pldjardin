@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from apps.gensdujardin.models import Profil
-from apps.jardin.serializers import JardinSerializer
+from apps.jardin.serializers import JardinFullSerializer
 
 
 class ProfilSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class UserUnauthenticatedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'profil', 'username', 'first_name', 'last_name')
+        fields = ('id', 'profil', 'username')
 
 class UserAuthenticatedSerializer(serializers.ModelSerializer):
     profil = ProfilSerializer()

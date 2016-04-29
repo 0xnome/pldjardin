@@ -1,3 +1,7 @@
+import pyqrcode
+import qrcode
+from django.http import HttpResponse
+
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -8,19 +12,30 @@ from apps.commentaires.serializer import CommentaireJardinSerializer, Commentair
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin import permissions
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-from apps.jardin.serializers import JardinSerializer, AdresseSerializer, LopinSerializer, ActualiteSerializer, \
-    PlanteSerializer
+from apps.jardin.serializers import JardinFullSerializer, AdresseSerializer, LopinSerializer, ActualiteSerializer, \
+    PlanteSerializer, JardinCreateSerializer, JardinUpdateSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
 
 
 class JardinViewSet(viewsets.ModelViewSet):
     """
-        list, create, retreive, update and delete
+        list, create, retreive, update, partial_update and delete
     """
-
     permission_classes = (JardinPermission,)
     queryset = Jardin.objects.all()
-    serializer_class = JardinSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retreive":
+            return JardinFullSerializer
+        elif self.action == "create":
+            return JardinCreateSerializer
+        else:
+            return JardinUpdateSerializer
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(administrateurs=[current_user], membres=[current_user])
+
 
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
@@ -70,7 +85,7 @@ class AdresseViewSet(viewsets.ModelViewSet):
     def jardins(self, request, pk=None):
         adresse = self.get_object()
         jardins = adresse.jardins.all()
-        serializer = JardinSerializer(jardins, many=True)
+        serializer = JardinFullSerializer(jardins, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -123,7 +138,7 @@ class LopinViewSet(viewsets.ModelViewSet):
     def jardin(self, request, pk=None):
         lopin = self.get_object()
         jardin = lopin.jardin
-        serializer = JardinSerializer(jardin)
+        serializer = JardinFullSerializer(jardin)
         return Response(serializer.data)
 
 
@@ -139,7 +154,7 @@ class ActualiteViewSet(viewsets.ModelViewSet):
     def jardin(self, request, pk=None):
         actualite = self.get_object()
         jardin = actualite.jardin
-        serializer = JardinSerializer(jardin)
+        serializer = JardinFullSerializer(jardin)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -178,3 +193,12 @@ class PlanteViewSet(viewsets.ModelViewSet):
         lopin = plante.lopin
         serializer = LopinSerializer(lopin)
         return Response(serializer.data)
+"""
+    @detail_route(methods=["GET"])
+    def qrcode(self, request, pk=None):
+        plante = self.get_object()
+        image = pyqrcode.create("http://localhost:8000/plante/"+str(plante.id)+"/")
+        response = HttpResponse(image.,mimetype="image/png", status=200)
+        image.save(response, "PNG")
+        return response
+"""

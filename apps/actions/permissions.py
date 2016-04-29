@@ -6,6 +6,7 @@ class ActionPermission(permissions.BasePermission):
     """
     Definit les permissions pour les actions
     """
+    pass
     # TODO:changer les parametres de actions une action doit elle correspondre a un type d'action necessairement ?
     # def has_permission(self, request, view):
     #     if request.method in permissions.SAFE_METHODS:
