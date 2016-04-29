@@ -44,10 +44,15 @@ class LopinUpdateSerializer(serializers.ModelSerializer):
         fields = ('id', 'adresse', 'nom', 'description')
 
 
-class PlanteSerializer(serializers.ModelSerializer):
+class PlanteFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plante
         fields = ('id', 'lopin', 'nom', 'image', 'espece', 'description')
+
+class PlanteUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plante
+        fields = ('id', 'nom', 'image', 'espece', 'description')
 
 
 class ActualiteSerializer(serializers.ModelSerializer):

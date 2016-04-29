@@ -28,54 +28,27 @@ class LopinPermission(permissions.IsAuthenticatedOrReadOnly):
         return obj.jardin is None or request.user in obj.jardin.administrateurs.all()
 
 
-class PlantePermission(permissions.BasePermission):
+class PlantePermission(permissions.IsAuthenticatedOrReadOnly):
     """
     Global permissions for plantes
     """
 
     def has_object_permission(self, request, view, obj):
-        # GET HEAD OPTION
         if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
             return True
-        # PUT PATCH POST DELETE
-        else:
-            if obj.lopin.jardin:
-                if request.user in obj.lopin.jardin.membres.all():
-                    return True
-                else:
-                    return False
-            else:
-                # TODO: un utilisateur peut il vraiment tout modifiez dans ue plante public ? delete etc...
+        if obj.lopin.jardin is not None:
+            if not obj.lopin.jardin.restreint:
+                # si le jardin n'est pas restreint
                 return True
-
-    def has_permission(self, request, view):
-        # GET OPTION HEAD
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # POST PATCH PUT DELETE
-        else:
-            if permissions.IsAuthenticated.has_permission(self,request,view):
-                if request.method == "POST":
-                    if "lopin" in request.data:
-                        id = request.data["lopin"]
-                        if id != "":
-                            lopin = Lopin.objects.get(pk=int(id))
-                            if lopin.jardin:
-                                if not lopin.jardin.restreint:
-                                    return True
-                                elif request.user in lopin.jardin.membres.all():
-                                    return True
-                            # un utilisateur connecté peut ajouter des plantes dans un lopin sans jardin
-                            return True
-                    # necessaire pour tester l'api
-                    else:
-                        return True
-                # DELETE PUT PATCH
-                else:
-                    return True
-            # utilisateur non connecté
+            elif request.user in obj.lopin.jardin.membres.all():
+                # il faut etre membre du jardin du lopin pour le modifier
+                return True
             else:
                 return False
+        else:
+            # On peut tout faire sur un plante d'un lopin public
+            return True
 
 
 class ActualitePermission(permissions.BasePermission):

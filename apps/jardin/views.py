@@ -10,17 +10,13 @@ from apps.actions.serializers import ActionSerializer
 from apps.commentaires.serializer import CommentaireJardinSerializer, CommentaireLopinSerializer, \
     CommentairePlanteSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
-from apps.jardin import permissions
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinFullSerializer, AdresseSerializer, LopinFullSerializer, ActualiteSerializer, \
-    PlanteSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer
+    PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
 
 
 class JardinViewSet(viewsets.ModelViewSet):
-    """
-        list, create, retreive, update, partial_update and delete
-    """
     permission_classes = (JardinPermission,)
     queryset = Jardin.objects.all()
 
@@ -81,10 +77,6 @@ class JardinViewSet(viewsets.ModelViewSet):
 
 
 class AdresseViewSet(viewsets.ModelViewSet):
-    """
-        list, create, retreive, update and delete
-    """
-
     queryset = Adresse.objects.all()
     serializer_class = AdresseSerializer
 
@@ -105,10 +97,6 @@ class AdresseViewSet(viewsets.ModelViewSet):
 
 
 class LopinViewSet(viewsets.ModelViewSet):
-    """
-        list, create, retreive, update and delete
-    """
-
     permission_classes = (LopinPermission,)
     queryset = Lopin.objects.all()
 
@@ -136,7 +124,7 @@ class LopinViewSet(viewsets.ModelViewSet):
     def plantes(self, request, pk=None):
         lopin = self.get_object()
         plantes = lopin.plantes.all()
-        serializer = PlanteSerializer(plantes, many=True)
+        serializer = PlanteFullSerializer(plantes, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -155,9 +143,6 @@ class LopinViewSet(viewsets.ModelViewSet):
 
 
 class ActualiteViewSet(viewsets.ModelViewSet):
-    """
-        list, create, retreive, update and delete
-    """
     permission_classes = (ActualitePermission,)
     queryset = Actualite.objects.all()
     serializer_class = ActualiteSerializer
@@ -177,13 +162,14 @@ class ActualiteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class PlanteViewSet(viewsets.ModelViewSet):
-    """
-        list, create, retreive, update and delete
-    """
-
     permission_classes = (PlantePermission,)
     queryset = Plante.objects.all()
-    serializer_class = PlanteSerializer
+
+    def get_serializer_class(self):
+        if self.action == "update" or self.action == "partial_update":
+            return PlanteUpdateSerializer
+        else:
+            return PlanteFullSerializer
 
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
@@ -205,12 +191,3 @@ class PlanteViewSet(viewsets.ModelViewSet):
         lopin = plante.lopin
         serializer = LopinFullSerializer(lopin)
         return Response(serializer.data)
-"""
-    @detail_route(methods=["GET"])
-    def qrcode(self, request, pk=None):
-        plante = self.get_object()
-        image = pyqrcode.create("http://localhost:8000/plante/"+str(plante.id)+"/")
-        response = HttpResponse(image.,mimetype="image/png", status=200)
-        image.save(response, "PNG")
-        return response
-"""
