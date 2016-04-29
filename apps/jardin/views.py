@@ -4,6 +4,7 @@ from django.http import HttpResponse
 
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from apps.actions.serializers import ActionSerializer
@@ -13,9 +14,8 @@ from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteSerializer, \
     PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
-    AdresseUpdateSerializer
+    AdresseUpdateSerializer, ResultsSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
-
 
 class JardinViewSet(viewsets.ModelViewSet):
     permission_classes = (JardinPermission,)
@@ -198,3 +198,21 @@ class PlanteViewSet(viewsets.ModelViewSet):
         lopin = plante.lopin
         serializer = LopinFullSerializer(lopin)
         return Response(serializer.data)
+
+
+def recherche(request):
+    print(request.GET)
+
+    class Results(object):
+        def __init__(self, jardins=None, lopins=None, plantes=None, adresses=None):
+            self.jardins = jardins
+            self.lopins = lopins
+            self.plantes = plantes
+            self.adresses = adresses
+
+    results = Results(jardins=Jardin.objects.all(),
+                      lopins=Lopin.objects.all(),
+                      plantes=Plante.objects.all(),
+                      adresses=Adresse.objects.all())
+    serializer = ResultsSerializer(results)
+    return HttpResponse(content=JSONRenderer().render(serializer.data))

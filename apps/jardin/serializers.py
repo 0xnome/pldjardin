@@ -7,7 +7,6 @@ from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
     Serializers basiques
 """
 
-
 class AdresseFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
@@ -66,3 +65,8 @@ class ActualiteSerializer(serializers.ModelSerializer):
         model = Actualite
         fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
 
+class ResultsSerializer(serializers.Serializer):
+    jardins = JardinFullSerializer(many=True, read_only=True)
+    lopins = LopinFullSerializer(many=True, read_only=True)
+    plantes = PlanteFullSerializer(many=True, read_only=True)
+    adresses = AdresseFullSerializer(many=True, read_only=True)
