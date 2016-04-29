@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='jardin',
-            name='compostier',
+            name='composter',
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(

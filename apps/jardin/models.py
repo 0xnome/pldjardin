@@ -52,7 +52,7 @@ class Jardin(models.Model):
     image = models.ImageField(upload_to=content_file_name_jardin, null=True)
     description = models.TextField(blank=True, null=True)
     restreint = models.BooleanField(default=False)
-    compostier = models.BooleanField(default=False)
+    composter = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.adresse.ville)
