@@ -146,8 +146,8 @@
         "ville": "Lyon",
         "code_postal": "69009",
         "rue": "204 avenue Barth\u00e9l\u00e9my Buyer",
-        "long": "45.766572",
-        "lat": "4.788235"
+        "long": "4.788235",
+        "lat": "45.766572"
     }
 },
 {
@@ -157,8 +157,8 @@
         "ville": "Villeurbanne",
         "code_postal": "69100",
         "rue": "6 Avenue des Arts",
-        "long": "45.783926",
-        "lat": "4.872306"
+        "long": "4.872306",
+        "lat": "45.783926"
     }
 },
 {
@@ -173,7 +173,7 @@
         "image": "images-jardins/Jardin collectif de ChampvertLyon/Jardin_champvert.jpg",
         "description": "Il s'agit d'un jardin partag\u00e9 p\u00e9dagogique. \r\nSa gestion est assur\u00e9e par le Centre Social de Champvert. Pour plus d'informations, vous pouvez le contacter. \r\nA l\u2019extr\u00e9mit\u00e9 du parc les enfants font des exp\u00e9riences de jardinage sur quelques carr\u00e9s. C\u2019est le centre de loisirs qui encadre les activit\u00e9s des jardiniers en herbe.",
         "restreint": false,
-        "compostier": true,
+        "composteur": true,
         "administrateurs": [
             4
         ],
@@ -196,7 +196,7 @@
         "image": "images-jardins/Le Doua VertVilleurbanne/jardin_douavert.jpg",
         "description": "Un promeneur jette un coup d\u2019\u0153il aux fleurs de courge, tandis qu\u2019un autre arrache quelques herbes autour des jeunes pousses d\u2019oignons. Pour le promeneur, c\u2019est d\u00e9coratif. Pour celui qui aime mettre ses mains dans la terre, c\u2019est une bonne occasion. Et c\u2019est tout ? \u00c7a vaudrait la peine de d\u00e9penser son \u00e9nergie pour un \u00ab truc \u00bb d\u00e9coratif et divertissant ?\r\n\r\nMais pour le promeneur, c\u2019est aussi une occasion de se rappeler comment est produite sa nourriture. Parce que les lieux o\u00f9 il ach\u00e8te \u00e0 manger sont si loin des lieux o\u00f9 la nourriture a \u00e9t\u00e9 produite qu\u2019il a tendance \u00e0 oublier que ce qu\u2019il met dans sa bouche est sorti de la terre en plusieurs semaines. Et donc que ses choix, ce qu\u2019il mange, a un impact sur ce qui l\u2019entoure.",
         "restreint": false,
-        "compostier": true,
+        "composteur": true,
         "administrateurs": [
             5
         ],

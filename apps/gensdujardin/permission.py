@@ -13,16 +13,15 @@ class UtilisateurPermission(permissions.BasePermission):
             # un utlisateur ne peut pas en cree si il est deja connecté
             if request.method == "POST":
                 return False
-            elif request.method in ["GET","PUT", "PATCH", "DELETE, OPTION, HEAD"]:
+            elif request.method in ["GET" ,"PUT", "PATCH"]:
                 return True
             # il est interdit de supprimer un utilisateur
             elif request.method in [ "DELETE"]:
                 return False
 
-        elif request.method in ["POST","GET"]:
+        elif request.method in ["POST","GET", "OPTION", "HEAD"]:
             return True
         return False
-
 
     def has_object_permission(self, request, view, obj):
 
