@@ -71,8 +71,6 @@ class Lopin(models.Model):
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
     description = models.TextField(blank=True, null=True)
 
-    qrcode = None
-
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
 
@@ -85,8 +83,6 @@ class Plante(models.Model):
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
     espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
     description = models.TextField(blank=True, null=True)
-
-    qrcode = None
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)

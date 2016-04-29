@@ -8,7 +8,7 @@ from apps.commentaires.serializer import CommentairePlanteSerializer, Commentair
 from apps.commentaires.permissions import CommentaireJardinPermission, CommentaireLopinPermission,\
     CommentairePlantePermission
 from apps.gensdujardin.serializers import UserFullSerializer
-from apps.jardin.serializers import PlanteSerializer, JardinFullSerializer, LopinSerializer
+from apps.jardin.serializers import PlanteSerializer, JardinFullSerializer, LopinFullSerializer
 
 
 class CommentairePlanteViewSet(mixins.CreateModelMixin,
@@ -78,5 +78,5 @@ class CommentaireLopinViewSet(mixins.CreateModelMixin,
     def lopin(self, request, pk=None):
         commentaire = self.get_object()
         lopin = commentaire.lopin
-        serializer = LopinSerializer(lopin)
+        serializer = LopinFullSerializer(lopin)
         return Response(serializer.data)

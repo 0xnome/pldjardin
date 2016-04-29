@@ -23,19 +23,25 @@ class JardinFullSerializer(serializers.ModelSerializer):
 class JardinCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'compostier', 'adresse')
+        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse')
 
 
 class JardinUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'compostier', 'adresse', 'administrateurs', 'membres')
+        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse', 'administrateurs', 'membres')
 
 
-class LopinSerializer(serializers.ModelSerializer):
+class LopinFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lopin
         fields = ('id', 'adresse', 'jardin', 'nom', 'description')
+
+
+class LopinUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lopin
+        fields = ('id', 'adresse', 'nom', 'description')
 
 
 class PlanteSerializer(serializers.ModelSerializer):

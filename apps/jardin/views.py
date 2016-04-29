@@ -12,8 +12,8 @@ from apps.commentaires.serializer import CommentaireJardinSerializer, Commentair
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin import permissions
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-from apps.jardin.serializers import JardinFullSerializer, AdresseSerializer, LopinSerializer, ActualiteSerializer, \
-    PlanteSerializer, JardinCreateSerializer, JardinUpdateSerializer
+from apps.jardin.serializers import JardinFullSerializer, AdresseSerializer, LopinFullSerializer, ActualiteSerializer, \
+    PlanteSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
 
 
@@ -25,7 +25,7 @@ class JardinViewSet(viewsets.ModelViewSet):
     queryset = Jardin.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list" or self.action == "retreive":
+        if self.action == "list" or self.action == "retrieve":
             return JardinFullSerializer
         elif self.action == "create":
             return JardinCreateSerializer
@@ -66,6 +66,13 @@ class JardinViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
+    def lopins(self, request, pk=None):
+        jardin = self.get_object()
+        lopins = jardin.lopins.all()
+        serializer = LopinFullSerializer(lopins, many=True)
+        return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
     def adresse(self, request, pk=None):
         jardin = self.get_object()
         adresse = jardin.adresse
@@ -93,7 +100,7 @@ class AdresseViewSet(viewsets.ModelViewSet):
         # TODO union avec les lopins du jardin a cette adresse ?
         adresse = self.get_object()
         lopins = adresse.lopins.all()
-        serializer = LopinSerializer(lopins, many=True)
+        serializer = LopinFullSerializer(lopins, many=True)
         return Response(serializer.data)
 
 
@@ -104,7 +111,12 @@ class LopinViewSet(viewsets.ModelViewSet):
 
     permission_classes = (LopinPermission,)
     queryset = Lopin.objects.all()
-    serializer_class = LopinSerializer
+
+    def get_serializer_class(self):
+        if self.action == "update" or self.action == "partial_update":
+            return LopinUpdateSerializer
+        else:
+            return LopinFullSerializer
 
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
@@ -191,7 +203,7 @@ class PlanteViewSet(viewsets.ModelViewSet):
     def lopin(self, request, pk=None):
         plante = self.get_object()
         lopin = plante.lopin
-        serializer = LopinSerializer(lopin)
+        serializer = LopinFullSerializer(lopin)
         return Response(serializer.data)
 """
     @detail_route(methods=["GET"])

@@ -3,7 +3,7 @@ from rest_framework import permissions
 from apps.jardin.models import Jardin, Lopin, Actualite
 
 
-class JardinPermission(permissions.BasePermission):
+class JardinPermission(permissions.IsAuthenticatedOrReadOnly):
     """
     Global permissions for jardins
     """
@@ -11,79 +11,23 @@ class JardinPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        elif request.user and request.user.is_authenticated():
-            return request.user in obj.administrateurs.all()
-        return False
-
-    def has_permission(self, request, view):
-        if request.method == "POST":
-            if request.user and request.user.is_authenticated():
-                return True
-        else:
-            return True
-        return False
+        return request.user in obj.administrateurs.all()
 
 
-# TODO: empecher un admin de donner le lopin a un autre jardin dont il n'est pas admin
-class LopinPermission(permissions.BasePermission):
+class LopinPermission(permissions.IsAuthenticatedOrReadOnly):
     """
     Global permissions for lopins
     """
 
     def has_object_permission(self, request, view, obj):
-
-        # get, Head, Option
         if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
             return True
-
-        #  Post, Patch, Put, Delete
-        else:
-            if obj.jardin:
-                if request.user in obj.jardin.administrateurs.all():
-                    return True
-
-                # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
-                else:
-                    return False
-
-        return True
-
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        elif permissions.IsAuthenticated.has_permission(self,request,view):
-            if request.method == "POST":
-                if "jardin" in request.data:
-                    id = request.data["jardin"]
-
-                    # tout le monde peut créer un lopin sans jardin
-                    if id == "":
-                        return True
-                    # Un admin seulement peut créer un lopin sur son jardin
-                    else:
-                        return request.user in Jardin.objects.get(pk=int(id)).administrateurs.all()
-
-                # necessaire pour tester l'api + creation de lopin hors jardin
-                else:
-                    return True
-            #  DELETE PUT PATCH
-            else:
-                return True
-        else:
-            return False
-
-        if "jardin" in request.data:
-            id = request.data["jardin"]
-            if id:
-                if not (request.user in Jardin.objects.get(pk=int(id)).administrateurs.all()):
-                    return False
-        return True
+        # On peut tout faire sur un lopin public ou il faut etre admin du jardin du lopin
         # TODO: un utilisateur peut il vraiment tout modifiez dans un lopin public ? delete etc...
+        return obj.jardin is None or request.user in obj.jardin.administrateurs.all()
 
 
-
-# TODO: empecher un membre de donner la plante a un autre jardin dont il n'est pas admin
 class PlantePermission(permissions.BasePermission):
     """
     Global permissions for plantes
