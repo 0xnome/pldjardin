@@ -13,8 +13,10 @@ from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteSerializer, \
     PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
-    AdresseUpdateSerializer, ResultsSerializer
-from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission
+    AdresseUpdateSerializer, ResultsSerializer, AdresseCreateSerializer, LopinCreateSerializer
+from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission, \
+    AdressePermission
+
 
 class JardinViewSet(viewsets.ModelViewSet):
     permission_classes = (JardinPermission,)
@@ -31,7 +33,6 @@ class JardinViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         current_user = self.request.user
         serializer.save(administrateurs=[current_user], membres=[current_user])
-
 
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
@@ -77,12 +78,14 @@ class JardinViewSet(viewsets.ModelViewSet):
 
 
 class AdresseViewSet(viewsets.ModelViewSet):
+    permission_classes = (AdressePermission,)
     queryset = Adresse.objects.all()
-    serializer_class = AdresseFullSerializer
 
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return AdresseUpdateSerializer
+        elif self.action == "create":
+            return AdresseCreateSerializer
         else:
             return AdresseFullSerializer
 
@@ -109,8 +112,13 @@ class LopinViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return LopinUpdateSerializer
+        if self.action == "create":
+            return LopinCreateSerializer
         else:
             return LopinFullSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
 
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):

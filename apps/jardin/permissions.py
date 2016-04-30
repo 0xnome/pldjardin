@@ -31,7 +31,9 @@ class LopinPermission(permissions.IsAuthenticatedOrReadOnly):
         if (request.method in permissions.SAFE_METHODS
             or request.user
             and request.user.is_authenticated()):
-            if (request.method == "POST" and "jardin" in request.data and request.data["jardin"] != ""):
+            if (request.method == "POST"
+                and "jardin" in request.data
+                and (request.data["jardin"] != "" and request.data["jardin"] is not None)):
                 try:
                     jardin = Jardin.objects.get(pk=int(request.data["jardin"]))
                     return request.user in jardin.administrateurs.all()
@@ -87,7 +89,7 @@ class PlantePermission(permissions.IsAuthenticatedOrReadOnly):
 
 class ActualitePermission(permissions.BasePermission):
     """
-    Global permissions for ActualiteJardin
+    Global permissions for Actualite
     """
     def has_object_permission(self, request, view, obj):
         # get head option
@@ -120,3 +122,8 @@ class ActualitePermission(permissions.BasePermission):
             else:
                 return True
         return False
+
+class AdressePermission(permissions.IsAuthenticatedOrReadOnly):
+    """
+    Global permissions for ActualiteJardin
+    """
