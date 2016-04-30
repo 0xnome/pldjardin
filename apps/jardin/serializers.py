@@ -21,14 +21,25 @@ class AdresseUpdateSerializer(serializers.ModelSerializer):
 class AdresseCreateSerializer(AdresseUpdateSerializer):
     pass
 
+class jardinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Jardin
 
-class JardinFullSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        # verification que les admins sont des membres
+        membres = set(data['membres'])
+        admins = set(data['administrateurs'])
+        if not admins <= membres:
+            raise serializers.ValidationError({"administrateurs":"Les administrateurs doivent d'abord être membre du jardin !"})
+        return data
+
+class JardinFullSerializer(jardinSerializer):
     class Meta:
         model = Jardin
         fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse', 'administrateurs', 'membres')
 
 
-class JardinCreateSerializer(serializers.ModelSerializer):
+class JardinCreateSerializer(jardinSerializer):
     adresse = AdresseCreateSerializer(many=False)
 
     class Meta:
@@ -55,7 +66,7 @@ class JardinCreateSerializer(serializers.ModelSerializer):
         return jardin
 
 
-class JardinUpdateSerializer(serializers.ModelSerializer):
+class JardinUpdateSerializer(jardinSerializer):
     class Meta:
         model = Jardin
         fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'administrateurs', 'membres')
