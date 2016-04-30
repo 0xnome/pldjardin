@@ -8,7 +8,7 @@ from django.utils.text import slugify
 
 
 def content_file_name(instance, filename):
-    return os.path.join(['avatars', instance.id + "_" + slugify(instance.user.username), filename])
+    return os.path.join(*['avatars', str(instance.user.id)+"_"+slugify(instance.user.username), filename])
 
 
 class  Profil(models.Model):

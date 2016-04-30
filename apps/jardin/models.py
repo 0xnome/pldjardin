@@ -9,17 +9,17 @@ from apps.gensdujardin.models import Profil
 
 
 def content_file_name_jardin(jardin, filename):
-    return os.path.join(['jardins', jardin.id + "_" + slugify(jardin.nom), filename])
+    return os.path.join(*['jardins', str(jardin.id) + "_" + slugify(jardin.nom), filename])
 
 
 def content_file_name_plante(plante, filename):
-    return os.path.join(['plantes', plante.id + "_" + slugify(plante.nom), filename])
+    return os.path.join(*['plantes', str(plante.id) + "_" + slugify(plante.nom), filename])
 
 
 class Adresse(models.Model):
     ville = models.CharField(max_length=100)
     code_postal_regex = RegexValidator(regex=r'^\d{5}$',
-                                       message="Le numéro de téléphone doit être composé de 10 chiffres.")
+                                       message="Le code postal doit être composé de 5 chiffres.")
     code_postal = models.CharField(max_length=5, validators=[code_postal_regex], verbose_name="Code postal")
     rue = models.CharField(max_length=200)
     long = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
