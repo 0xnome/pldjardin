@@ -137,12 +137,6 @@ class ActualiteSerializer(serializers.ModelSerializer):
         model = Actualite
         fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
 
-"""
-class AdresseFullWithSerializer(AdresseFullSerializer):
-    jardins = JardinFullSerializer(many=True)
-    lopins = LopinFullSerializer(many=True)
-"""
-
 class AdresseFullWithSerializer(AdresseFullSerializer):
     jardins = JardinFullSerializer(many=True)
     lopins = LopinFullSerializer(many=True)

@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.http import HttpResponse
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -77,7 +77,10 @@ class JardinViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AdresseViewSet(viewsets.ModelViewSet):
+class AdresseViewSet(mixins.UpdateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
     permission_classes = (AdressePermission,)
     queryset = Adresse.objects.all()
 
@@ -112,8 +115,6 @@ class LopinViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return LopinUpdateSerializer
-        if self.action == "create":
-            return LopinCreateSerializer
         else:
             return LopinFullSerializer
 
@@ -174,6 +175,7 @@ class ActualiteViewSet(viewsets.ModelViewSet):
         auteur = actualite.auteur
         serializer = UserFullSerializer(auteur)
         return Response(serializer.data)
+
 
 class PlanteViewSet(viewsets.ModelViewSet):
     permission_classes = (PlantePermission,)

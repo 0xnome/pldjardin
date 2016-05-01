@@ -127,3 +127,14 @@ class AdressePermission(permissions.IsAuthenticatedOrReadOnly):
     """
     Global permissions for ActualiteJardin
     """
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
+            return True
+        # On peut modifier l'adresse d'un lopin public ou il faut etre admin du jardin du lopin
+        if obj.jardins.count():
+            for jardin in obj.jardins.all():
+                if request.user in jardin.administrateurs.all():
+                    return True
+            return False
+        return True
