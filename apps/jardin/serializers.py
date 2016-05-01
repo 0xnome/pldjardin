@@ -12,6 +12,7 @@ class AdresseFullSerializer(serializers.ModelSerializer):
         model = Adresse
         fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat', 'jardins', 'lopins')
 
+
 class AdresseUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
