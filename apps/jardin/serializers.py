@@ -132,10 +132,15 @@ class PlanteUpdateSerializer(serializers.ModelSerializer):
         fields = ('id', 'nom', 'image', 'espece', 'description')
 
 
-class ActualiteSerializer(serializers.ModelSerializer):
+class ActualiteFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actualite
         fields = ('id', 'auteur', 'jardin', 'texte', 'date_creation')
+
+class ActualiteCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actualite
+        fields = ('id', 'jardin', 'texte')
 
 class AdresseFullWithSerializer(AdresseFullSerializer):
     jardins = JardinFullSerializer(many=True)

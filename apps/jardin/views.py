@@ -11,9 +11,10 @@ from apps.commentaires.serializer import CommentaireJardinSerializer, Commentair
     CommentairePlanteSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteSerializer, \
+from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteFullSerializer, \
     PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
-    AdresseUpdateSerializer, ResultsSerializer, AdresseCreateSerializer, LopinCreateSerializer
+    AdresseUpdateSerializer, ResultsSerializer, AdresseCreateSerializer, LopinCreateSerializer, \
+    ActualiteCreateSerializer
 from apps.jardin.permissions import JardinPermission, LopinPermission, PlantePermission, ActualitePermission, \
     AdressePermission
 
@@ -45,7 +46,7 @@ class JardinViewSet(viewsets.ModelViewSet):
     def actualites(self, request, pk=None):
         jardin = self.get_object()
         actualites = jardin.actualites.all()
-        serializer = ActualiteSerializer(actualites, many=True)
+        serializer = ActualiteFullSerializer(actualites, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -157,10 +158,23 @@ class LopinViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ActualiteViewSet(viewsets.ModelViewSet):
+class ActualiteViewSet(mixins.CreateModelMixin,
+                       mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.DestroyModelMixin,
+                       viewsets.GenericViewSet):
     permission_classes = (ActualitePermission,)
     queryset = Actualite.objects.all()
-    serializer_class = ActualiteSerializer
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(auteur=current_user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return ActualiteCreateSerializer
+        else:
+            return ActualiteFullSerializer
 
     @detail_route(methods=["GET"])
     def jardin(self, request, pk=None):
