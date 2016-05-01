@@ -276,4 +276,4 @@ def recherche(request):
                       )
 
     serializer = ResultsSerializer(results)
-    return HttpResponse(content=JSONRenderer().render(serializer.data))
+    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json")
