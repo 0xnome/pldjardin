@@ -24,7 +24,7 @@ from apps import jardin
 from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
 from apps.gensdujardin.views import UserViewSet
 from apps.jardin.views import JardinViewSet, AdresseViewSet, LopinViewSet, ActualiteViewSet, PlanteViewSet
-from apps.actions.views import ActionViewSet, TypeActionViewSet
+from apps.actions.views import ActionViewSet
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 router = routers.DefaultRouter()
@@ -35,7 +35,7 @@ router.register(r'lopins', LopinViewSet)
 router.register(r'actualites', ActualiteViewSet)
 router.register(r'plantes', PlanteViewSet)
 router.register(r'actions', ActionViewSet)
-router.register(r'typesaction', TypeActionViewSet)
+# router.register(r'typesaction', TypeActionViewSet)
 router.register(r'commentairesjardin', CommentaireJardinViewSet)
 router.register(r'commentaireslopin', CommentaireLopinViewSet)
 router.register(r'commentairesplante', CommentairePlanteViewSet)

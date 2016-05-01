@@ -82,21 +82,16 @@ class CommentaireLopin{
 class Action{
 	id
 	date
-}
-
-class TypeAction{
-	id
-	nom
+	type
 }
 
 
 Jardin "0..n" -- "0..1" Lopin : jardin
 Lopin "0..n" -- "1..1" Plante : lopin
 
-TypeAction "0..n" -- "1..1" Action : type
 Action "1..1" -- "0..n" Utilisateur : utilisateur
 Action "0..1" -- "0..n" Plante : plante
-Action "0..1" -- "0..n" Lopin : lopin
+'Action "0..1" -- "0..n" Lopin : lopin
 
 CommentairePlante "1..1" -- "0..n" Utilisateur : auteur
 CommentairePlante "1..1" -- "0..n" Plante : plante

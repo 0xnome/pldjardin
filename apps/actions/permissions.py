@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from apps.actions.models import TypeAction
+
 
 
 class ActionPermission(permissions.BasePermission):

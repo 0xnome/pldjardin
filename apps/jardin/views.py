@@ -106,7 +106,6 @@ class AdresseViewSet(mixins.UpdateModelMixin,
 
     @detail_route(methods=["GET"])
     def lopins(self, request, pk=None):
-        # TODO union avec les lopins du jardin a cette adresse ?
         adresse = self.get_object()
         lopins = adresse.lopins.all()
         serializer = LopinFullSerializer(lopins, many=True)
@@ -146,7 +145,9 @@ class LopinViewSet(viewsets.ModelViewSet):
     @detail_route(methods=["GET"])
     def actions(self, request, pk=None):
         lopin = self.get_object()
-        actions = lopin.actions.all()
+        actions = []
+        for plante in lopin.plantes.all():
+            actions = actions + list(plante.actions.all())
         serializer = ActionSerializer(actions, many=True)
         return Response(serializer.data)
 

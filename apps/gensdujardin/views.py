@@ -41,8 +41,6 @@ class UserViewSet(mixins.DestroyModelMixin,
     def perform_destroy(self, instance):
         # on désactive l'utilisateur plutot que de le supprimer de la base.
         # TODO: Savoir que faire d'un utilisateur qui quitte le site. Pour l'instant on la desactive, ce qui lui permettra de ne plus etre dans la liste des utilisateurs tout en conservant son profil. Cepandant les objets qui lui sont lié existent toujours et sont visibles. Cela peut poser des problèmes d'anonymat : doit - on changer son nom/prenom/avatar ? Que faire si c'etait la seule admin d'un jardin ?
-        
-
         instance.is_active = False
         instance.save()
 
