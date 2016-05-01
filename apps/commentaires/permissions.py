@@ -2,142 +2,95 @@ from rest_framework import permissions
 
 from apps.jardin.models import Jardin, Lopin, Plante
 
+class CommentairePermission(permissions.IsAuthenticatedOrReadOnly):
+    class Meta:
+        abstract = True
 
-# TODO: checker que les auteur sont bien les utilisateurs courants
-# TODO: LOIC TU DOIS REPASSER DESSUS !!!
-class CommentaireJardinPermission(permissions.IsAuthenticatedOrReadOnly):
+
+class CommentaireJardinPermission(CommentairePermission):
     """
     Global permissions for CommentaireJardin
     """
-
     def has_object_permission(self, request, view, obj):
-        # get head option
         if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
             return True
-        if request.method == "DELETE":
-            if request.user == obj.auteur:
-                return True
-            elif request.user in obj.jardin.administrateurs.all():
-                return True
-        return False
+        # POST, DELETE si auteur
+        return request.user == obj.auteur or request.user in obj.jardin.administrateurs.all()
 
     def has_permission(self, request, view):
-        # get head option
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
-            if request.method == "POST":
-                if "jardin" in request.data:
-                    id = int(request.data["jardin"])
-                    # jardin non restreint
-                    if not (Jardin.objects.get(pk=id).restreint):
-                        return True
-                    # utilisateur membre du jardin restreint
-                    elif request.user in Jardin.objects.get(pk=id).membres.all():
-                        return True
-                # pour le test de l'api rest
-                else:
-                    return True
-            # DELETE PUT PATCH
+        if (request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated()):
+            if (request.method == "POST" and "jardin" in request.data):
+                try:
+                    jardin = Jardin.objects.get(pk=int(request.data["jardin"]))
+                    return not jardin.restreint or request.user in jardin.membres.all()
+                except:
+                    return False
+            elif request.method == "DELETE":
+                return True
             else:
                 return True
-        # l'utilisateur non connecté n'a pas de droit de modification
-        return False
+        else:
+            return False
 
 
-# TODO: checker que les auteur sont bien les utilisateurs courants
-class CommentaireLopinPermission(permissions.BasePermission):
+class CommentaireLopinPermission(CommentairePermission):
     """
        Global permissions for CommentaireLopin
     """
-
     def has_object_permission(self, request, view, obj):
-        # get head option
         if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
             return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
-            if request.method == "DELETE":
-                if request.user == obj.auteur:
-                    return True
-                elif obj.lopin.jardin:
-                    if request.user in obj.jardin.administrateurs.all():
-                        return True
-                return False
-        return False
+        # POST, DELETE si auteur
+        return request.user == obj.auteur or\
+               (obj.lopin.jardin is not None and request.user in obj.lopin.jardin.administrateurs.all())
 
     def has_permission(self, request, view):
-        # get head option
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
-            if request.method == "POST":
-                if "lopin" in request.data:
-                    jardin = Lopin.objects.get(pk=int(request.data["lopin"])).jardin
-                    if jardin:
-                        if not jardin.restreint:
-                            return True
-                        elif request.user in jardin.membres.all():
-                            return True
-                    # un utilisateur peut commenter un lopin sans jardin
-                    else:
-                        return True
-                # pour le test de l'api rest
-                else:
-                    return True
-            # DELETE PUT PATCH
+        if (request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated()):
+            if (request.method == "POST" and "lopin" in request.data):
+                try:
+                    lopin = Lopin.objects.get(pk=int(request.data["lopin"]))
+                    return lopin.jardin is None or not lopin.jardin.restreint or request.user in lopin.jardin.membres.all()
+                except:
+                    return False
+            elif request.method == "DELETE":
+                return True
             else:
                 return True
-        # l'utilisateur non connecté n'a pas de droit de modification
-        return False
+        else:
+            return False
 
 
-# TODO: checker que les auteur sont bien les utilisateurs courants
-class CommentairePlantePermission(permissions.BasePermission):
+class CommentairePlantePermission(CommentairePermission):
     """
        Global permissions for CommentairePlante
     """
-
     def has_object_permission(self, request, view, obj):
-        # get head option
         if request.method in permissions.SAFE_METHODS:
+            # get, Head, Option
             return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
-            if request.method == "DELETE":
-                if request.user == obj.auteur:
-                    return True
-                elif obj.plante.lopin.jardin:
-                    if request.user in obj.plante.lopin.jardin.administrateurs.all():
-                        return True
-                return False
-        return False
+        # POST, DELETE si auteur
+        return request.user == obj.auteur or\
+               (obj.plante.lopin.jardin is not None and request.user in obj.plante.lopin.jardin.administrateurs.all())
 
     def has_permission(self, request, view):
-        # get head option
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        # utilisateur connecté
-        elif permissions.IsAuthenticated.has_permission(self, request, view):
-            if request.method == "POST":
-                if "plante" in request.data:
-                    jardin = Plante.objects.get(pk=int(request.data["plante"])).lopin.jardin
-                    if jardin:
-                        if not jardin.restreint:
-                            return True
-                        elif request.user in jardin.membres.all():
-                            return True
-                    # un utilisateur peut commenter une plante sans jardin
-                    else:
-                        return True
-
-                # pour le test de l'api rest
-                else:
-                    return True
-            # DELETE PUT PATCH
+        if (request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated()):
+            if (request.method == "POST" and "plante" in request.data):
+                try:
+                    plante = Plante.objects.get(pk=int(request.data["plante"]))
+                    return plante.lopin.jardin is None or not plante.lopin.jardin.restreint or request.user in plante.lopin.jardin.membres.all()
+                except:
+                    return False
+            elif request.method == "DELETE":
+                return True
             else:
                 return True
-        # l'utilisateur non connecté n'a pas de droit de modification
-        return False
+        else:
+            return False

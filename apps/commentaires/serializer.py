@@ -6,22 +6,37 @@ from apps.commentaires.models import CommentairePlante, CommentaireLopin, Commen
 """
 
 
-class CommentairePlanteSerializer(serializers.ModelSerializer):
-
+class CommentairePlanteFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentairePlante
         fields = ('id', 'texte', 'date_creation', 'auteur', 'plante')
 
 
-class CommentaireLopinSerializer(serializers.ModelSerializer):
+class CommentairePlanteCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentairePlante
+        fields = ('id', 'texte', 'plante')
 
+
+class CommentaireLopinFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentaireLopin
         fields = ('id', 'texte', 'date_creation', 'auteur', 'lopin')
 
 
-class CommentaireJardinSerializer(serializers.ModelSerializer):
+class CommentaireLopinCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentaireLopin
+        fields = ('id', 'texte', 'lopin')
 
+
+class CommentaireJardinFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentaireJardin
         fields = ('id', 'texte', 'date_creation', 'auteur', 'jardin')
+
+
+class CommentaireJardinCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentaireJardin
+        fields = ('id', 'texte', 'jardin')

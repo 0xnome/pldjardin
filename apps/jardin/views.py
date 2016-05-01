@@ -7,8 +7,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from apps.actions.serializers import ActionSerializer
-from apps.commentaires.serializer import CommentaireJardinSerializer, CommentaireLopinSerializer, \
-    CommentairePlanteSerializer
+from apps.commentaires.serializer import CommentaireJardinFullSerializer, CommentaireLopinFullSerializer, \
+    CommentairePlanteFullSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteFullSerializer, \
@@ -35,11 +35,17 @@ class JardinViewSet(viewsets.ModelViewSet):
         current_user = self.request.user
         serializer.save(administrateurs=[current_user], membres=[current_user])
 
+    def perform_destroy(self, instance):
+        adresse = instance.adresse
+        instance.delete()
+        adresse.delete()
+
+
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
         jardin = self.get_object()
         commentaires = jardin.commentaires.all()
-        serializer = CommentaireJardinSerializer(commentaires, many=True)
+        serializer = CommentaireJardinFullSerializer(commentaires, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -88,8 +94,6 @@ class AdresseViewSet(mixins.UpdateModelMixin,
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return AdresseUpdateSerializer
-        elif self.action == "create":
-            return AdresseCreateSerializer
         else:
             return AdresseFullSerializer
 
@@ -116,17 +120,27 @@ class LopinViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return LopinUpdateSerializer
+        elif self.action == "create":
+            return LopinCreateSerializer
         else:
             return LopinFullSerializer
 
     def perform_create(self, serializer):
         serializer.save()
 
+    def perform_destroy(self, instance):
+        adresse = instance.adresse
+        jardin = instance.jardin
+        instance.delete()
+        # On supprime l'adresse d'un lopin indépendant
+        if jardin is None:
+            adresse.delete()
+
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
         lopin = self.get_object()
         commentaires = lopin.commentaires.all()
-        serializer = CommentaireLopinSerializer(commentaires, many=True)
+        serializer = CommentaireLopinFullSerializer(commentaires, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -205,7 +219,7 @@ class PlanteViewSet(viewsets.ModelViewSet):
     def commentaires(self, request, pk=None):
         plante = self.get_object()
         commentaires = plante.commentaires.all()
-        serializer = CommentairePlanteSerializer(commentaires, many=True)
+        serializer = CommentairePlanteFullSerializer(commentaires, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])

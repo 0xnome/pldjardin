@@ -3,8 +3,9 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from apps.commentaires.models import CommentairePlante, CommentaireJardin, CommentaireLopin
-from apps.commentaires.serializer import CommentairePlanteSerializer, CommentaireJardinSerializer, \
-    CommentaireLopinSerializer
+from apps.commentaires.serializer import CommentairePlanteFullSerializer, CommentaireJardinFullSerializer, \
+    CommentaireLopinFullSerializer, CommentaireJardinCreateSerializer, CommentairePlanteCreateSerializer, \
+    CommentaireLopinCreateSerializer
 from apps.commentaires.permissions import CommentaireJardinPermission, CommentaireLopinPermission,\
     CommentairePlantePermission
 from apps.gensdujardin.serializers import UserFullSerializer
@@ -18,7 +19,16 @@ class CommentairePlanteViewSet(mixins.CreateModelMixin,
                                viewsets.GenericViewSet):
     permission_classes = (CommentairePlantePermission,)
     queryset = CommentairePlante.objects.all()
-    serializer_class = CommentairePlanteSerializer
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(auteur=current_user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CommentairePlanteCreateSerializer
+        else:
+            return CommentairePlanteFullSerializer
 
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
@@ -41,7 +51,16 @@ class CommentaireJardinViewSet(mixins.CreateModelMixin,
                                viewsets.GenericViewSet):
     permission_classes = (CommentaireJardinPermission,)
     queryset = CommentaireJardin.objects.all()
-    serializer_class = CommentaireJardinSerializer
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(auteur=current_user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CommentaireJardinCreateSerializer
+        else:
+            return CommentaireJardinFullSerializer
 
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
@@ -65,7 +84,16 @@ class CommentaireLopinViewSet(mixins.CreateModelMixin,
                               viewsets.GenericViewSet):
     permission_classes = (CommentaireLopinPermission,)
     queryset = CommentaireLopin.objects.all()
-    serializer_class = CommentaireLopinSerializer
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(auteur=current_user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CommentaireLopinCreateSerializer
+        else:
+            return CommentaireLopinFullSerializer
 
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
