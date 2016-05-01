@@ -27,11 +27,13 @@ class jardinSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         # verification que les admins sont des membres
-        membres = set(data['membres'])
-        admins = set(data['administrateurs'])
-        if not admins <= membres:
-            raise serializers.ValidationError({"administrateurs":"Les administrateurs doivent d'abord être membre du jardin !"})
+        membres = data["membres"] if "membres" in data else (self.instance.membres.all() if self.instance else [])
+        administrateurs = data["administrateurs"] if "administrateurs" in data else (self.instance.administrateurs.all() if self.instance else [])
+
+        if not set(administrateurs) <= set(membres):
+            raise serializers.ValidationError({"administrateurs":"Les administrateurs doivent être membre du jardin !"})
         return data
+
 
 class JardinFullSerializer(jardinSerializer):
     class Meta:
@@ -72,14 +74,28 @@ class JardinUpdateSerializer(jardinSerializer):
         fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'administrateurs', 'membres')
 
 
-class LopinFullSerializer(serializers.ModelSerializer):
+class LopinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lopin
+
+    def validate(self, attrs):
+        # verification : si le lopin a un jardin, son adresse doit  etre la meme que le jardin
+        jardin = attrs["jardin"] if "jardin" in attrs else (self.instance.jardin if self.instance else None)
+        adresse = attrs["adresse"] if "adresse" in attrs else (self.instance.adresse if self.instance else None)
+        if jardin is None and adresse is None:
+            raise serializers.ValidationError({"jardin":"Un lopin doit avoir un jardin, ou une adresse.","adresse":"Un lopin doit avoir un jardin, ou une adresse."})
+        if jardin is not None and (adresse != jardin.adresse and adresse is not None):
+            raise serializers.ValidationError({"adresse":"L'adresse d'un lopin appartenant a un jardin, doit être celle du jardin"})
+        return attrs
+
+class LopinFullSerializer(LopinSerializer):
     class Meta:
         model = Lopin
         fields = ('id', 'adresse', 'jardin', 'nom', 'description')
 
 
-class LopinCreateSerializer(serializers.ModelSerializer):
-    adresse = AdresseCreateSerializer(required=False)
+class LopinCreateSerializer(LopinSerializer):
+    adresse = AdresseCreateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = Lopin
@@ -96,10 +112,10 @@ class LopinCreateSerializer(serializers.ModelSerializer):
             # alors le jardin est set
             lopin = Lopin.objects.create(**validated_data)
             lopin.adresse = lopin.jardin.adresse
-
+            lopin.save()
         return lopin
 
-class LopinUpdateSerializer(serializers.ModelSerializer):
+class LopinUpdateSerializer(LopinSerializer):
     class Meta:
         model = Lopin
         fields = ('id', 'nom', 'description')

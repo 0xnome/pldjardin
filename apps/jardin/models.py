@@ -35,7 +35,6 @@ def create_default_adresse():
 
 class Jardin(models.Model):
     adresse = models.ForeignKey(Adresse, related_name="jardins")
-    # TODO un administrateur DOIT etre un membre
     administrateurs = models.ManyToManyField(User, related_name="admin_jardins")
     membres = models.ManyToManyField(User, related_name="membre_jardins")
 
@@ -65,9 +64,8 @@ class Actualite(models.Model):
 
 
 class Lopin(models.Model):
-    # todo verification : si le lopin a un jardin, son adresse doit  etre la meme que le jardin
     adresse = models.ForeignKey(Adresse,related_name="lopins",
-                                help_text="Adresse du lopin. Cette adresse doit être égale à l'adresse du jardin si le lopin se trouve dans un jardin",
+                                help_text="Adresse du lopin indépendant.",
                                 null=True)
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True, related_name='lopins')
 
