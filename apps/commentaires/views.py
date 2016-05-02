@@ -33,16 +33,26 @@ class CommentairePlanteViewSet(mixins.CreateModelMixin,
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
-        adresse = commentaire.adresse
-        serializer = UserFullSerializer(adresse)
-        return Response(serializer.data)
+        auteur = commentaire.auteur
+        serializer = UserFullSerializer(auteur)
+        data = serializer.data
+        image = data["profil"]["avatar"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def plante(self, request, pk=None):
         commentaire = self.get_object()
         plante = commentaire.plante
         serializer = PlanteFullSerializer(plante)
-        return Response(serializer.data)
+        data = serializer.data
+        image = data["image"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
 class CommentaireJardinViewSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
@@ -65,16 +75,26 @@ class CommentaireJardinViewSet(mixins.CreateModelMixin,
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
-        adresse = commentaire.adresse
-        serializer = UserFullSerializer(adresse)
-        return Response(serializer.data)
+        auteur = commentaire.auteur
+        serializer = UserFullSerializer(auteur)
+        data = serializer.data
+        image = data["profil"]["avatar"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def jardin(self, request, pk=None):
         commentaire = self.get_object()
         jardin = commentaire.jardin
         serializer = JardinFullSerializer(jardin)
-        return Response(serializer.data)
+        data = serializer.data
+        image = data["image"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
 
 class CommentaireLopinViewSet(mixins.CreateModelMixin,
@@ -98,9 +118,14 @@ class CommentaireLopinViewSet(mixins.CreateModelMixin,
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
         commentaire = self.get_object()
-        adresse = commentaire.adresse
-        serializer = UserFullSerializer(adresse)
-        return Response(serializer.data)
+        auteur = commentaire.auteur
+        serializer = UserFullSerializer(auteur)
+        data = serializer.data
+        image = data["profil"]["avatar"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def lopin(self, request, pk=None):

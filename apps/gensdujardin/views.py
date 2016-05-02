@@ -58,14 +58,26 @@ class UserViewSet(mixins.DestroyModelMixin,
         user = self.get_object()
         jardins = user.membre_jardins.all()
         serializer = JardinFullSerializer(jardins, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for jardin in data:
+            image = jardin["image"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def admin_jardins(self, request, pk=None):
         user = self.get_object()
         jardins = user.admin_jardins.all()
         serializer = JardinFullSerializer(jardins, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for jardin in data:
+            image = jardin["image"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def actions(self, request, pk=None):

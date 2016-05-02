@@ -60,14 +60,26 @@ class JardinViewSet(viewsets.ModelViewSet):
         jardin = self.get_object()
         membres = jardin.membres.all()
         serializer = UserFullSerializer(membres, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for user in data:
+            image = user["profil"]["avatar"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                user["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def administrateurs(self, request, pk=None):
         jardin = self.get_object()
         administrateurs = jardin.administrateurs.all()
         serializer = UserFullSerializer(administrateurs, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for user in data:
+            image = user["profil"]["avatar"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                user["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def lopins(self, request, pk=None):
@@ -102,7 +114,13 @@ class AdresseViewSet(mixins.UpdateModelMixin,
         adresse = self.get_object()
         jardins = adresse.jardins.all()
         serializer = JardinFullSerializer(jardins, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for jardin in data:
+            image = jardin["image"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def lopins(self, request, pk=None):
@@ -156,7 +174,13 @@ class LopinViewSet(viewsets.ModelViewSet):
         lopin = self.get_object()
         plantes = lopin.plantes.all()
         serializer = PlanteFullSerializer(plantes, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        for plante in data:
+            image = plante["image"]
+            if image and "http://" not in image:
+                # si l'http n'est pas dans l'image
+                plante["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def adresse(self, request, pk=None):
@@ -170,7 +194,12 @@ class LopinViewSet(viewsets.ModelViewSet):
         lopin = self.get_object()
         jardin = lopin.jardin
         serializer = JardinFullSerializer(jardin)
-        return Response(serializer.data)
+        data = serializer.data
+        image = data["image"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
 
 class ActualiteViewSet(mixins.CreateModelMixin,
@@ -196,14 +225,24 @@ class ActualiteViewSet(mixins.CreateModelMixin,
         actualite = self.get_object()
         jardin = actualite.jardin
         serializer = JardinFullSerializer(jardin)
-        return Response(serializer.data)
+        data = serializer.data
+        image = data["image"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
     @detail_route(methods=["GET"])
     def auteur(self, request, pk=None):
         actualite = self.get_object()
         auteur = actualite.auteur
         serializer = UserFullSerializer(auteur)
-        return Response(serializer.data)
+        data = serializer.data
+        image = data["profil"]["avatar"]
+        if image and "http://" not in image:
+            # si l'http n'est pas dans l'image
+            data["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+        return Response(data)
 
 
 class PlanteViewSet(viewsets.ModelViewSet):
