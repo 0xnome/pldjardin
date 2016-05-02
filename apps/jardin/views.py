@@ -216,6 +216,10 @@ class PlanteViewSet(viewsets.ModelViewSet):
         else:
             return PlanteFullSerializer
 
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        serializer.save(utilisateur=current_user)
+
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
         plante = self.get_object()

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.actions.models import Action
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 
 
@@ -126,6 +127,16 @@ class PlanteFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plante
         fields = ('id', 'lopin', 'nom', 'image', 'espece', 'description')
+
+    def create(self, validated_data):
+        utilisateur = None
+        if "utilisateur" in validated_data:
+            utilisateur = validated_data.pop('utilisateur')
+        plante = Plante.objects.create(**validated_data)
+        # ajout d'une action de création
+        if utilisateur:
+            action = Action.objects.create(plante=plante, type=Action.PLANTER, utilisateur=utilisateur)
+        return plante
 
 class PlanteUpdateSerializer(serializers.ModelSerializer):
     class Meta:
