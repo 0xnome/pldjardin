@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.http import HttpResponse
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import detail_route
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -94,6 +94,24 @@ class JardinViewSet(viewsets.ModelViewSet):
         adresse = jardin.adresse
         serializer = AdresseFullSerializer(adresse)
         return Response(serializer.data)
+
+    @detail_route(methods=["GET"])
+    def rejoindre(self, request, pk=None):
+        jardin = self.get_object()
+        if request.user and request.user.is_authenticated():
+            if request.user not in jardin.membres.all():
+                if jardin.restreint == False:
+                    jardin.membres.add(request.user)
+                    jardin.save()
+                    return HttpResponse(content=JSONRenderer().render({'message':'Vous avez rejoind le jardin.'}), content_type="application/json", status=status.HTTP_200_OK)
+                else:
+                    return HttpResponse(content=JSONRenderer().render({'error':'Vous ne pouvez pas rejoindre un jardin restreint !'}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+            else:
+                return HttpResponse(
+                    content=JSONRenderer().render({'error': 'Vous aviez déjà rejoind ce jardin !'}),
+                    content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+        else:
+            return HttpResponse(content=JSONRenderer().render({'error':'Vous devez être connecté pour effectuer cette action !'}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)
 
 
 class AdresseViewSet(mixins.UpdateModelMixin,
@@ -320,4 +338,4 @@ def recherche(request):
                       )
 
     serializer = ResultsSerializer(results)
-    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json")
+    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json", status=status.HTTP_200_OK)
