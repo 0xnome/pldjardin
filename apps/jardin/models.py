@@ -9,11 +9,11 @@ from apps.gensdujardin.models import Profil
 
 
 def content_file_name_jardin(jardin, filename):
-    return os.path.join(*['jardins', str(jardin.id) + "_" + slugify(jardin.nom), filename])
+    return os.path.join(*['jardins', str(jardin.pk) + "_" + slugify(jardin.nom), filename])
 
 
 def content_file_name_plante(plante, filename):
-    return os.path.join(*['plantes', str(plante.id) + "_" + slugify(plante.nom), filename])
+    return os.path.join(*['plantes', str(plante.pk) + "_" + slugify(plante.nom), filename])
 
 
 class Adresse(models.Model):
@@ -83,7 +83,7 @@ class Plante(models.Model):
     # TODO default pour l'image, calcul en fonction de l'espce ?
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
     espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
-    description = models.TextField(blank=True, null=True, default="Pas de description")
+    description = models.TextField(null=True, default="Pas de description")
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
