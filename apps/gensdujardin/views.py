@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from rest_framework import status, mixins
 
-from apps.actions.serializers import ActionSerializer
+from apps.actions.serializers import ActionFullSerializer
 from apps.gensdujardin.serializers import UserFullSerializer, InscriptionSerializer, UserAuthenticatedSerializer, \
     UserUnauthenticatedSerializer, UserUpdateSerializer
 
@@ -71,7 +71,7 @@ class UserViewSet(mixins.DestroyModelMixin,
     def actions(self, request, pk=None):
         user = self.get_object()
         actions = user.actions.all()
-        serializer = ActionSerializer(actions, many=True)
+        serializer = ActionFullSerializer(actions, many=True)
         return Response(serializer.data)
 
     @list_route(methods=["POST"])

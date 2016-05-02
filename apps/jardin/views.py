@@ -6,7 +6,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
-from apps.actions.serializers import ActionSerializer
+from apps.actions.serializers import ActionFullSerializer
 from apps.commentaires.serializer import CommentaireJardinFullSerializer, CommentaireLopinFullSerializer, \
     CommentairePlanteFullSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
@@ -148,7 +148,7 @@ class LopinViewSet(viewsets.ModelViewSet):
         actions = []
         for plante in lopin.plantes.all():
             actions = actions + list(plante.actions.all())
-        serializer = ActionSerializer(actions, many=True)
+        serializer = ActionFullSerializer(actions, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])
@@ -227,7 +227,7 @@ class PlanteViewSet(viewsets.ModelViewSet):
     def actions(self, request, pk=None):
         plante = self.get_object()
         actions = plante.actions.all()
-        serializer = ActionSerializer(actions, many=True)
+        serializer = ActionFullSerializer(actions, many=True)
         return Response(serializer.data)
 
     @detail_route(methods=["GET"])

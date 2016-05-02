@@ -11,13 +11,15 @@ class Action(models.Model):
     CUEILLIR = 'CE'
     FERTILISER = 'FE'
     ELAGUER = 'EL'
+    #LIBRE = 'LI'
     ALL_ACTION = (
         (ARROSER, 'Arroser'),
         (PLANTER, 'Planter'),
         (RETIRER, 'Retirer'),
         (CUEILLIR, 'Cueillir'),
         (FERTILISER, 'Fertiliser'),
-        (ELAGUER, 'Elaguer')
+        (ELAGUER, 'Elaguer'),
+        # (LIBRE, 'Libre')
     )
     USER_AVAILABLE_ACTION =(ARROSER, CUEILLIR, FERTILISER, ELAGUER,)
 
@@ -31,16 +33,16 @@ class Action(models.Model):
     def __str__(self):
         if self.type == self.ARROSER:
             # un UTILISATEUR arrose une PLANTE
-            pass
+            return "{} a arrosé la plante {}".format(self.utilisateur.username, self.plante.nom)
         elif self.type == self.PLANTER:
             # un UTILISATEUR plante une PLANTE
-            pass
+            return "{} a planté la plante {}".format(self.utilisateur.username, self.plante.nom)
         elif self.type == self.CUEILLIR:
             # un UTILISATEUR cueille une PLANTE
-            pass
+            return "{} a cueilli la plante {}".format(self.utilisateur.username, self.plante.nom)
         elif self.type == self.FERTILISER:
             # un UTILISATEUR cueille une PLANTE
-            pass
+            return "{} a fertilisé la plante {}".format(self.utilisateur.username, self.plante.nom)
         elif self.type == self.ELAGUER:
-            pass
+            return "{} a élagué la plante {}".format(self.utilisateur.username, self.plante.nom)
         return "Action inconnue : {}".format(self.type)

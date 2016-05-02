@@ -5,7 +5,7 @@ from apps.actions.models import Action
     Serializers basiques
 """
 
-class ActionSerializer(serializers.ModelSerializer):
+class ActionFullSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('id', 'type', 'utilisateur',
@@ -13,3 +13,18 @@ class ActionSerializer(serializers.ModelSerializer):
                   'plante', 'date_creation')
         model = Action
 
+class ActionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id', 'type',
+                  #'lopin',
+                  'plante')
+        model = Action
+
+    def validate(self, data):
+        # verification que le type est autorisé
+        type = data["type"] if "type" in data else (self.instance.type if self.instance else "")
+
+        if not type in Action.USER_AVAILABLE_ACTION:
+            raise serializers.ValidationError(
+                {"type": "Ce type d'action n'est pas autorisé"})
+        return data
