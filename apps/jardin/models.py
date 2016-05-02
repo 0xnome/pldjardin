@@ -22,8 +22,8 @@ class Adresse(models.Model):
                                        message="Le code postal doit être composé de 5 chiffres.")
     code_postal = models.CharField(max_length=5, validators=[code_postal_regex], verbose_name="Code postal")
     rue = models.CharField(max_length=200)
-    long = models.DecimalField(max_digits=9, decimal_places=7, default=0.0)
-    lat = models.DecimalField(max_digits=9, decimal_places=7, default=0.0)
+    lat = models.DecimalField(max_digits=9, decimal_places=7, default=0.0, blank=True, null=True)
+    long = models.DecimalField(max_digits=9, decimal_places=7, default=0.0, blank=True, null=True)
 
     def __str__(self):
         return "{} - {} - {}".format(self.rue, self.ville, self.code_postal)
@@ -44,7 +44,7 @@ class Jardin(models.Model):
     horaire = models.TextField()
     # TODO mettre une image par defaut a la place du null false
     image = models.ImageField(upload_to=content_file_name_jardin, null=True)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default="Pas de description")
     restreint = models.BooleanField(default=False)
     composteur = models.BooleanField(default=False)
 
@@ -70,7 +70,7 @@ class Lopin(models.Model):
     jardin = models.ForeignKey(Jardin, on_delete=models.CASCADE, null=True, related_name='lopins')
 
     nom = models.CharField(max_length=50, help_text="Nom du lopin")
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default="Pas de description")
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
@@ -83,7 +83,7 @@ class Plante(models.Model):
     # TODO default pour l'image, calcul en fonction de l'espce ?
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
     espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default="Pas de description")
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)

@@ -11,13 +11,13 @@ from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
 class AdresseFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
-        fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat', 'jardins', 'lopins')
+        fields = ('id', 'ville', 'code_postal', 'rue', 'lat', 'long', 'jardins', 'lopins')
 
 
 class AdresseUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adresse
-        fields = ('id', 'ville', 'code_postal', 'rue', 'long', 'lat')
+        fields = ('id', 'ville', 'code_postal', 'rue', 'lat', 'long')
 
 
 class AdresseCreateSerializer(AdresseUpdateSerializer):
