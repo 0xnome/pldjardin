@@ -127,7 +127,6 @@ class JardinViewSet(viewsets.ModelViewSet):
                 if user in jardin.administrateurs.all():
                     if jardin.administrateurs.count() > 1:
                         jardin.administrateurs.remove(user)
-
                     else:
                         return HttpResponse(
                             content=JSONRenderer().render(

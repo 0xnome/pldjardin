@@ -18,19 +18,19 @@ from rest_framework import viewsets
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.gensdujardin.permission import UtilisateurPermission
 
+
 class UserViewSet(mixins.DestroyModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
-
     permission_classes = (UtilisateurPermission,)
     queryset = User.objects.filter(is_active=True).all()
 
     def get_serializer_class(self):
         if self.action == "update" or self.action == "partial_update":
             return UserUpdateSerializer
-        if self.action == "create": # desactivée, la création se fait par /utilisateurs/inscription/
+        if self.action == "create":  # desactivée, la création se fait par /utilisateurs/inscription/
             return InscriptionSerializer
         else:
             if self.request.user and self.request.user.is_authenticated():
@@ -62,7 +62,7 @@ class UserViewSet(mixins.DestroyModelMixin,
             image = jardin["image"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+                jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -75,7 +75,7 @@ class UserViewSet(mixins.DestroyModelMixin,
             image = jardin["image"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+                jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -85,8 +85,9 @@ class UserViewSet(mixins.DestroyModelMixin,
         serializer = ActionFullSerializer(actions, many=True)
         return Response(serializer.data)
 
+
 @api_view(["POST"])
-def inscription(self, request):
+def inscription(request):
     if not request.user or not request.user.is_authenticated():
         serializer = InscriptionSerializer(data=request.data)
         if serializer.is_valid():
@@ -99,5 +100,7 @@ def inscription(self, request):
                 "token": jwt_encode_handler(payload)
             }
             return HttpResponse(json.dumps(token), content_type="application/json", status=status.HTTP_201_CREATED)
-        return HttpResponse(JSONRenderer().render(serializer.errors), content_type="application/json", status=status.HTTP_400_BAD_REQUEST)
-    return HttpResponse(JSONRenderer().render({"error":"Vous devez être déconnecté pour effectuer cette action !"}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+        return HttpResponse(JSONRenderer().render(serializer.errors), content_type="application/json",
+                            status=status.HTTP_400_BAD_REQUEST)
+    return HttpResponse(JSONRenderer().render({"error": "Vous devez être déconnecté pour effectuer cette action !"}),
+                        content_type="application/json", status=status.HTTP_403_FORBIDDEN)
