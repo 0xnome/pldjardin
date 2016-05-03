@@ -44,6 +44,7 @@ class Jardin(models.Model):
     horaire = models.TextField()
     # TODO mettre une image par defaut a la place du null false
     image = models.ImageField(upload_to=content_file_name_jardin, null=True)
+    plan = models.ImageField(upload_to=content_file_name_jardin, null=True)
     description = models.TextField(blank=True, null=True, default="Pas de description")
     restreint = models.BooleanField(default=False)
     composteur = models.BooleanField(default=False)
@@ -74,7 +75,7 @@ class Lopin(models.Model):
 
     def __str__(self):
         j = str(self.jardin.pk) if self.jardin else None
-        return "({}) [{}] {} - {}".format(j,self.pk,self.nom, self.description)
+        return "{} - {}".format(self.nom, self.description)
 
 
 class Plante(models.Model):
@@ -88,3 +89,7 @@ class Plante(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
+
+#class PlanteInfo(models.Model):
+ #   commun = models.CharField(max_length=200, verbose_name="Le nom commun de la plante")
+  #  scientifique = models.CharField(max_length=200, verbose_name="Le nom scientifique de la plante")

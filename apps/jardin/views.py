@@ -167,9 +167,13 @@ class AdresseViewSet(mixins.UpdateModelMixin,
         data = serializer.data
         for jardin in data:
             image = jardin["image"]
+            plan = jardin["plan"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
                 jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
+            if plan and "http://" not in plan:
+                # si l'http n'est pas dans l'plan
+                jardin["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -249,6 +253,10 @@ class LopinViewSet(viewsets.ModelViewSet):
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
             data["image"] = self.request.build_absolute_uri('/') + image[1:]
+        plan = data["plan"]
+        if plan and "http://" not in plan:
+            # si l'http n'est pas dans l'plan
+            data["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
 
@@ -280,6 +288,10 @@ class ActualiteViewSet(mixins.CreateModelMixin,
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
             data["image"] = self.request.build_absolute_uri('/') + image[1:]
+        plan = data["plan"]
+        if plan and "http://" not in plan:
+            # si l'http n'est pas dans l'plan
+            data["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -371,10 +383,10 @@ def recherche(request):
     # adresses_query = Adresse.objects
 
     for keyword in keywordlist:
-        jardins_query = jardins_query.filter(filterjardins(keyword))
-        lopins_query = lopins_query.filter(filterlopins(keyword))
-        plantes_query = plantes_query.filter(filterplantes(keyword))
-        # adresses_query = adresses_query.filter(filteradresses(keyword))
+        jardins_query = jardins_query.filter(filterjardins(keyword)).distinct()
+        lopins_query = lopins_query.filter(filterlopins(keyword)).distinct()
+        plantes_query = plantes_query.filter(filterplantes(keyword)).distinct()
+        # adresses_query = adresses_query.filter(filteradresses(keyword)).distinct()
 
     results = Results(jardins=jardins_query,
                       lopins=lopins_query,

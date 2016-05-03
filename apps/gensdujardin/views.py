@@ -63,6 +63,10 @@ class UserViewSet(mixins.DestroyModelMixin,
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
                 jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
+            plan = jardin["plan"]
+            if plan and "http://" not in plan:
+                # si l'http n'est pas dans l'plan
+                jardin["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -76,6 +80,10 @@ class UserViewSet(mixins.DestroyModelMixin,
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
                 jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
+            plan = jardin["plan"]
+            if plan and "http://" not in plan:
+                # si l'http n'est pas dans l'plan
+                jardin["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])

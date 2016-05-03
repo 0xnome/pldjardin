@@ -40,7 +40,7 @@ class jardinSerializer(serializers.ModelSerializer):
 class JardinFullSerializer(jardinSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse', 'administrateurs', 'membres')
+        fields = ('id', 'nom', 'actualites', 'lopins', 'commentaires', 'site', 'contact', 'horaire', 'image', 'plan', 'description', 'restreint', 'composteur', 'adresse', 'administrateurs', 'membres')
 
 
 class JardinCreateSerializer(jardinSerializer):
@@ -48,7 +48,7 @@ class JardinCreateSerializer(jardinSerializer):
 
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'adresse')
+        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'plan', 'description', 'restreint', 'composteur', 'adresse')
         depth = 1
 
     def create(self, validated_data):
@@ -73,7 +73,7 @@ class JardinCreateSerializer(jardinSerializer):
 class JardinUpdateSerializer(jardinSerializer):
     class Meta:
         model = Jardin
-        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'description', 'restreint', 'composteur', 'administrateurs', 'membres')
+        fields = ('id', 'nom', 'site', 'contact', 'horaire', 'image', 'plan', 'description', 'restreint', 'composteur', 'administrateurs', 'membres')
 
 
 class LopinSerializer(serializers.ModelSerializer):

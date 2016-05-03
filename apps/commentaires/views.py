@@ -94,6 +94,10 @@ class CommentaireJardinViewSet(mixins.CreateModelMixin,
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
             data["image"] = self.request.build_absolute_uri('/')+image[1:]
+        plan = data["plan"]
+        if plan and "http://" not in plan:
+            # si l'http n'est pas dans l'plan
+            data["plan"] = self.request.build_absolute_uri('/') + plan[1:]
         return Response(data)
 
 
