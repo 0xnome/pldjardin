@@ -11,7 +11,8 @@ from apps.commentaires.serializer import CommentaireJardinFullSerializer, Commen
     CommentairePlanteFullSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, ActualiteFullSerializer, \
+from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, \
+    ActualiteFullSerializer, \
     PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
     AdresseUpdateSerializer, ResultsSerializer, AdresseCreateSerializer, LopinCreateSerializer, \
     ActualiteCreateSerializer
@@ -40,7 +41,6 @@ class JardinViewSet(viewsets.ModelViewSet):
         instance.delete()
         adresse.delete()
 
-
     @detail_route(methods=["GET"])
     def commentaires(self, request, pk=None):
         jardin = self.get_object()
@@ -65,7 +65,7 @@ class JardinViewSet(viewsets.ModelViewSet):
             image = user["profil"]["avatar"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                user["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+                user["profil"]["avatar"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -78,7 +78,7 @@ class JardinViewSet(viewsets.ModelViewSet):
             image = user["profil"]["avatar"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                user["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+                user["profil"]["avatar"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -100,18 +100,51 @@ class JardinViewSet(viewsets.ModelViewSet):
         jardin = self.get_object()
         if request.user and request.user.is_authenticated():
             if request.user not in jardin.membres.all():
-                if jardin.restreint == False:
+                if not jardin.restreint:
                     jardin.membres.add(request.user)
                     jardin.save()
-                    return HttpResponse(content=JSONRenderer().render({'message':'Vous avez rejoind le jardin.'}), content_type="application/json", status=status.HTTP_200_OK)
+                    return HttpResponse(content=JSONRenderer().render({'message': 'Vous avez rejoind le jardin.'}),
+                                        content_type="application/json", status=status.HTTP_200_OK)
                 else:
-                    return HttpResponse(content=JSONRenderer().render({'error':'Vous ne pouvez pas rejoindre un jardin restreint !'}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+                    return HttpResponse(
+                        content=JSONRenderer().render({'error': 'Vous ne pouvez pas rejoindre un jardin restreint !'}),
+                        content_type="application/json", status=status.HTTP_403_FORBIDDEN)
             else:
                 return HttpResponse(
                     content=JSONRenderer().render({'error': 'Vous aviez déjà rejoind ce jardin !'}),
                     content_type="application/json", status=status.HTTP_403_FORBIDDEN)
         else:
-            return HttpResponse(content=JSONRenderer().render({'error':'Vous devez être connecté pour effectuer cette action !'}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+            return HttpResponse(
+                content=JSONRenderer().render({'error': 'Vous devez être connecté pour effectuer cette action !'}),
+                content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+
+    @detail_route(methods=["GET"])
+    def quitter(self, request, pk=None):
+        user = request.user
+        jardin = self.get_object()
+        if user and user.is_authenticated():
+            if user in jardin.membres.all():
+                if user in jardin.administrateurs.all():
+                    if jardin.administrateurs.count() > 1:
+                        jardin.administrateurs.remove(user)
+
+                    else:
+                        return HttpResponse(
+                            content=JSONRenderer().render(
+                                {'error': 'Vous etes le dernier admin du jardin, vous ne pouvez pas le quitter !'}),
+                            content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+                jardin.membres.remove(user)
+                jardin.save()
+                return HttpResponse(content=JSONRenderer().render({'message': 'Vous avez quitté le jardin.'}),
+                                    content_type="application/json", status=status.HTTP_200_OK)
+            else:
+                return HttpResponse(
+                    content=JSONRenderer().render({'error': 'Vous n\etes pas membres de jardin !'}),
+                    content_type="application/json", status=status.HTTP_403_FORBIDDEN)
+        else:
+            return HttpResponse(
+                content=JSONRenderer().render({'error': 'Vous devez être connecté pour effectuer cette action !'}),
+                content_type="application/json", status=status.HTTP_403_FORBIDDEN)
 
 
 class AdresseViewSet(mixins.UpdateModelMixin,
@@ -137,7 +170,7 @@ class AdresseViewSet(mixins.UpdateModelMixin,
             image = jardin["image"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                jardin["image"] = self.request.build_absolute_uri('/')+image[1:]
+                jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -197,7 +230,7 @@ class LopinViewSet(viewsets.ModelViewSet):
             image = plante["image"]
             if image and "http://" not in image:
                 # si l'http n'est pas dans l'image
-                plante["image"] = self.request.build_absolute_uri('/')+image[1:]
+                plante["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -216,7 +249,7 @@ class LopinViewSet(viewsets.ModelViewSet):
         image = data["image"]
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
-            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+            data["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
 
@@ -247,7 +280,7 @@ class ActualiteViewSet(mixins.CreateModelMixin,
         image = data["image"]
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
-            data["image"] = self.request.build_absolute_uri('/')+image[1:]
+            data["image"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
     @detail_route(methods=["GET"])
@@ -259,7 +292,7 @@ class ActualiteViewSet(mixins.CreateModelMixin,
         image = data["profil"]["avatar"]
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
-            data["profil"]["avatar"] = self.request.build_absolute_uri('/')+image[1:]
+            data["profil"]["avatar"] = self.request.build_absolute_uri('/') + image[1:]
         return Response(data)
 
 
@@ -313,10 +346,18 @@ def recherche(request):
             self.plantes = plantes
             self.adresses = adresses
 
-    filterjardins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) | Q(adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword))
-    filterlopins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword))| Q(adresse__ville__icontains=keyword) | Q(adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword)
-    filterplantes = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(espece__icontains=keyword) | Q(lopin__adresse__ville__icontains=keyword) | Q(lopin__adresse__rue__icontains=keyword) | Q(lopin__adresse__code_postal__icontains=keyword))
-    filteradresses = lambda keyword: (Q(ville__icontains=keyword) | Q(rue__icontains=keyword) | Q(code_postal__icontains=keyword))
+    filterjardins = lambda keyword: (
+        Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) | Q(
+            adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword))
+    filterlopins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword)) | Q(
+        adresse__ville__icontains=keyword) | Q(adresse__rue__icontains=keyword) | Q(
+        adresse__code_postal__icontains=keyword)
+    filterplantes = lambda keyword: (
+        Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(espece__icontains=keyword) | Q(
+            lopin__adresse__ville__icontains=keyword) | Q(lopin__adresse__rue__icontains=keyword) | Q(
+            lopin__adresse__code_postal__icontains=keyword))
+    filteradresses = lambda keyword: (
+        Q(ville__icontains=keyword) | Q(rue__icontains=keyword) | Q(code_postal__icontains=keyword))
 
     jardins_query = Jardin.objects
     lopins_query = Lopin.objects
@@ -329,8 +370,6 @@ def recherche(request):
         plantes_query = plantes_query.filter(filterplantes(keyword))
         # adresses_query = adresses_query.filter(filteradresses(keyword))
 
-
-
     results = Results(jardins=jardins_query,
                       lopins=lopins_query,
                       plantes=plantes_query,
@@ -338,4 +377,5 @@ def recherche(request):
                       )
 
     serializer = ResultsSerializer(results)
-    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json", status=status.HTTP_200_OK)
+    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json",
+                        status=status.HTTP_200_OK)
