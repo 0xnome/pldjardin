@@ -73,7 +73,8 @@ class Lopin(models.Model):
     description = models.TextField(blank=True, null=True, default="Pas de description")
 
     def __str__(self):
-        return "{} - {}".format(self.nom, self.description)
+        j = str(self.jardin.pk) if self.jardin else None
+        return "({}) [{}] {} - {}".format(j,self.pk,self.nom, self.description)
 
 
 class Plante(models.Model):
@@ -83,7 +84,7 @@ class Plante(models.Model):
     # TODO default pour l'image, calcul en fonction de l'espce ?
     image = models.ImageField(upload_to=content_file_name_plante, null=True)
     espece = models.CharField(max_length=50, help_text="Nom scientifique de la plante")
-    description = models.TextField(null=True, default="Pas de description")
+    description = models.TextField(null=True, blank=True, default="Pas de description")
 
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
