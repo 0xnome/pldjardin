@@ -44,6 +44,7 @@ router.register(r'commentairesplante', CommentairePlanteViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^recherche/$', jardin.views.recherche, name="recherche"),
+    url(r'^rechercheplante/$', jardin.views.recherchePlante, name="rechercheplante"),
     url(r'^inscription/$', gensdujardin.views.inscription, name="inscription"),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

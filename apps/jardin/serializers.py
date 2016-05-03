@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from apps.actions.models import Action
-from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
-
+from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante, PlanteInfo
 
 """
     Serializers basiques
@@ -158,9 +157,14 @@ class AdresseFullWithSerializer(AdresseFullSerializer):
     jardins = JardinFullSerializer(many=True)
     lopins = LopinFullSerializer(many=True)
 
+class PlanteinfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlanteInfo
+        fields = ('id', 'commun', 'scientifique')
 
 class ResultsSerializer(serializers.Serializer):
     jardins = JardinFullSerializer(many=True, read_only=True)
     lopins = LopinFullSerializer(many=True, read_only=True)
     plantes = PlanteFullSerializer(many=True, read_only=True)
-    # adresses = AdresseFullWithSerializer(many=True, read_only=True)
+    adresses = AdresseFullWithSerializer(many=True, read_only=True)
+    planteinfos = PlanteinfoSerializer(many=True, read_only=True)

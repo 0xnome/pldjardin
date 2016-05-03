@@ -10,7 +10,7 @@ from apps.actions.serializers import ActionFullSerializer
 from apps.commentaires.serializer import CommentaireJardinFullSerializer, CommentaireLopinFullSerializer, \
     CommentairePlanteFullSerializer
 from apps.gensdujardin.serializers import UserFullSerializer
-from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante
+from apps.jardin.models import Jardin, Adresse, Lopin, Actualite, Plante, PlanteInfo
 from apps.jardin.serializers import JardinFullSerializer, AdresseFullSerializer, LopinFullSerializer, \
     ActualiteFullSerializer, \
     PlanteFullSerializer, JardinCreateSerializer, JardinUpdateSerializer, LopinUpdateSerializer, PlanteUpdateSerializer, \
@@ -343,19 +343,21 @@ class PlanteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class Results(object):
+    def __init__(self, jardins=None, lopins=None, plantes=None, adresses=None, planteinfos=None):
+        self.jardins = jardins
+        self.lopins = lopins
+        self.plantes = plantes
+        self.adresses = adresses
+        self.planteinfos = planteinfos
+
+
 def recherche(request):
     keywords = ""
     if "q" in request.GET and request.GET["q"] != "":
         keywords = request.GET["q"]
 
     keywordlist = keywords.split()
-
-    class Results(object):
-        def __init__(self, jardins=None, lopins=None, plantes=None, adresses=None):
-            self.jardins = jardins
-            self.lopins = lopins
-            self.plantes = plantes
-            self.adresses = adresses
 
     filterjardins = lambda keyword: (
         Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) |
@@ -397,3 +399,24 @@ def recherche(request):
     serializer = ResultsSerializer(results)
     return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json",
                         status=status.HTTP_200_OK)
+
+def recherchePlante(request):
+    keywords = ""
+    if "q" in request.GET and request.GET["q"] != "":
+        keywords = request.GET["q"]
+
+    keywordlist = keywords.split()
+    filterplanteinfos = lambda keyword: (
+        Q(commun__icontains=keyword) | Q(scientifique__icontains=keyword)
+    )
+    planteinfos_query = PlanteInfo.objects
+
+    for keyword in keywordlist:
+        planteinfos_query = planteinfos_query.filter(filterplanteinfos(keyword)).distinct()
+
+    results = Results(planteinfos=planteinfos_query.extra(select={'length': 'Length(commun)'}).order_by('length'))
+
+    serializer = ResultsSerializer(results)
+    return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json",
+                        status=status.HTTP_200_OK)
+

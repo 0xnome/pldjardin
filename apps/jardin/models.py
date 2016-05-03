@@ -1,8 +1,9 @@
 import os
 
+import io
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.utils.text import slugify
 
 from apps.gensdujardin.models import Profil
@@ -90,6 +91,30 @@ class Plante(models.Model):
     def __str__(self):
         return "{} - {}".format(self.nom, self.description)
 
-#class PlanteInfo(models.Model):
- #   commun = models.CharField(max_length=200, verbose_name="Le nom commun de la plante")
-  #  scientifique = models.CharField(max_length=200, verbose_name="Le nom scientifique de la plante")
+class PlanteInfo(models.Model):
+    commun = models.CharField(max_length=200, verbose_name="Le nom commun de la plante")
+    scientifique = models.CharField(max_length=200, verbose_name="Le nom scientifique de la plante")
+
+    def __str__(self):
+        return "{} ({})".format(self.commun, self.scientifique)
+
+@transaction.atomic()
+def loadPlantes():
+    import csv
+    filename = 'doc/base_plante.csv'
+    with io.open(filename,'r',encoding='utf8') as file:
+        data = csv.reader(file, delimiter=";")
+        count = 0
+        for i, row in enumerate(data):
+            can_insert = True
+            for j, col in enumerate(row):
+                if col == "":
+                    can_insert = False
+            if can_insert:
+                # on a toutes les infos
+                PlanteInfo.objects.create(commun=row[2], scientifique=row[1])
+                count += 1
+            if count%100 == 0:
+                print(str(count)+"/9469 PlanteInfo créées")
+        print("TOTAL : "+str(count)+"/9469 PlanteInfo créées")
+
