@@ -347,17 +347,24 @@ def recherche(request):
             self.adresses = adresses
 
     filterjardins = lambda keyword: (
-        Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) | Q(
-            adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword))
-    filterlopins = lambda keyword: (Q(nom__icontains=keyword) | Q(description__icontains=keyword)) | Q(
+        Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(adresse__ville__icontains=keyword) |
+        Q(adresse__rue__icontains=keyword) | Q(adresse__code_postal__icontains=keyword) |
+        Q(lopins__plantes__nom__icontains=keyword) | Q(lopins__plantes__espece__icontains=keyword)
+    )
+    filterlopins = lambda keyword: (
+        Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(
         adresse__ville__icontains=keyword) | Q(adresse__rue__icontains=keyword) | Q(
-        adresse__code_postal__icontains=keyword)
+        adresse__code_postal__icontains=keyword)  | Q(plantes__nom__icontains=keyword) |
+        Q(plantes__espece__icontains=keyword)
+    )
     filterplantes = lambda keyword: (
         Q(nom__icontains=keyword) | Q(description__icontains=keyword) | Q(espece__icontains=keyword) | Q(
             lopin__adresse__ville__icontains=keyword) | Q(lopin__adresse__rue__icontains=keyword) | Q(
-            lopin__adresse__code_postal__icontains=keyword))
+            lopin__adresse__code_postal__icontains=keyword)
+    )
     filteradresses = lambda keyword: (
-        Q(ville__icontains=keyword) | Q(rue__icontains=keyword) | Q(code_postal__icontains=keyword))
+        Q(ville__icontains=keyword) | Q(rue__icontains=keyword) | Q(code_postal__icontains=keyword)
+    )
 
     jardins_query = Jardin.objects
     lopins_query = Lopin.objects
