@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
@@ -18,7 +18,6 @@ from rest_framework import viewsets
 from apps.gensdujardin.serializers import UserFullSerializer
 from apps.gensdujardin.permission import UtilisateurPermission
 
-#class UserViewSet(viewsets.ModelViewSet):
 class UserViewSet(mixins.DestroyModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
@@ -86,8 +85,9 @@ class UserViewSet(mixins.DestroyModelMixin,
         serializer = ActionFullSerializer(actions, many=True)
         return Response(serializer.data)
 
-    @list_route(methods=["POST"])
-    def inscription(self, request):
+@api_view(["POST"])
+def inscription(self, request):
+    if not request.user or not request.user.is_authenticated():
         serializer = InscriptionSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.data
@@ -100,3 +100,4 @@ class UserViewSet(mixins.DestroyModelMixin,
             }
             return HttpResponse(json.dumps(token), content_type="application/json", status=status.HTTP_201_CREATED)
         return HttpResponse(JSONRenderer().render(serializer.errors), content_type="application/json", status=status.HTTP_400_BAD_REQUEST)
+    return HttpResponse(JSONRenderer().render({"error":"Vous devez être déconnecté pour effectuer cette action !"}), content_type="application/json", status=status.HTTP_403_FORBIDDEN)

@@ -20,6 +20,7 @@ from django.conf.urls import url, include
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import routers
 
+from apps import gensdujardin
 from apps import jardin
 from apps.commentaires.views import CommentaireJardinViewSet, CommentaireLopinViewSet, CommentairePlanteViewSet
 from apps.gensdujardin.views import UserViewSet
@@ -43,6 +44,7 @@ router.register(r'commentairesplante', CommentairePlanteViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^recherche/$', jardin.views.recherche, name="recherche"),
+    url(r'^inscription/$', gensdujardin.views.inscription, name="inscription"),
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', obtain_jwt_token),
