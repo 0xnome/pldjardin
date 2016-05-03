@@ -29,9 +29,18 @@ class ActionViewSet(mixins.CreateModelMixin,
     @list_route(methods=["GET"])
     def types(self, request):
         # retourner les paire clé/valeur des types d'action disponible a la création pour un utilisateur
-        res = {"types":[]}
+        res = {"types": []}
         for type in Action.ALL_ACTION:
             if type[0] in Action.USER_AVAILABLE_ACTION:
                 res["types"].append(type)
+        return HttpResponse(JSONRenderer().render(res), content_type="application/json", status=status.HTTP_200_OK)
+
+
+    @list_route(methods=["GET"])
+    def toustypes(self, request):
+        # retourner les paire clé/valeur des types d'action disponible a la création pour un utilisateur
+        res = {"types": {}}
+        for type in Action.ALL_ACTION:
+                res["types"][type[0]] = type[1]
         return HttpResponse(JSONRenderer().render(res), content_type="application/json", status=status.HTTP_200_OK)
 
