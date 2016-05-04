@@ -403,16 +403,16 @@ def recherche(request):
         plan = jardin["plan"]
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
-            jardin["image"] = self.request.build_absolute_uri('/') + image[1:]
+            jardin["image"] = request.build_absolute_uri('/') + image[1:]
         if plan and "http://" not in plan:
             # si l'http n'est pas dans l'plan
-            jardin["plan"] = self.request.build_absolute_uri('/') + plan[1:]
+            jardin["plan"] = request.build_absolute_uri('/') + plan[1:]
 
     for plante in data["plantes"]:
         image = plante["image"]
         if image and "http://" not in image:
             # si l'http n'est pas dans l'image
-            plante["image"] = self.request.build_absolute_uri('/') + image[1:]
+            plante["image"] = request.build_absolute_uri('/') + image[1:]
 
     return HttpResponse(content=JSONRenderer().render(serializer.data), content_type="application/json",
                         status=status.HTTP_200_OK)
